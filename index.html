@@ -354,6 +354,25 @@
       gap: 6px
     }
 
+    .view-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .view-actions button {
+      min-width: 40px;
+      padding: 6px;
+      font-size: 21px;
+      line-height: 1
+    }
+
+    .view-actions svg {
+      display: block;
+      width: 20px;
+      height: 20px
+    }
+
     .acts button {
       padding: 5px 9px;
       font-size: 13px
@@ -1013,10 +1032,17 @@
         <div id="list"></div>
       </section>
       <section id="view" class="hide">
-        <div class="row" style="margin-bottom:12px"><button id="exitView">← Back to songs</button></div>
+        <div class="row" style="margin-bottom:12px"><button id="exitView">← Back to songs</button><div class="view-actions">
+            <button class="p" id="prevSong" type="button" aria-label="Previous song" title="Previous song"><svg
+                aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 L9 12 L15 6"></path></svg></button>
+            <button class="p" id="nextSong" type="button" aria-label="Next song" title="Next song"><svg
+                aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round"><path d="M9 18 L15 12 L9 6"></path></svg></button>
+            <button class="p hide" id="viewEdit" type="button" aria-label="Edit song" title="Edit song">✏️</button>
+          </div></div>
         <div class="panel">
-          <div class="row" style="margin-bottom:12px"><h2 id="vt" style="margin:0"></h2><button class="p hide"
-              id="viewEdit" type="button" aria-label="Edit song" title="Edit song">✏️</button></div>
+          <h2 id="vt"></h2>
           <div id="vs" class="vs"></div>
           <pre id="vb"></pre>
         </div>
@@ -1138,6 +1164,7 @@
     const categoryName = s => s.category || '🎵 Church Songs';
     const categoryType = c => (c.type === 'specific' ? 'specific' : 'general');
     const songOrder = s => Number.isFinite(Number(s.order)) ? Number(s.order) : Number(s.id) || 0;
+    const songsInCategory = category => songs.filter(s => categoryName(s) === category).sort((a, b) => songOrder(a) - songOrder(b) || Number(a.id) - Number(b.id));
     const visibleCategories = () => role === 'Owner' ? categories : categories.filter(c => categoryType(c) === 'general' || myAccess.includes(c.id));
 
     const root = document.documentElement;
@@ -1189,7 +1216,7 @@
       const c = categories.find(x => x.id === activeCategory), name = c ? categoryDocName(c) : '';
       if (c && !visibleCategories().some(x => x.id === c.id)) { activeCategory = null; show('dash'); return }
       const q = $('search').value.trim().toLowerCase();
-      const all = [...songs].filter(s => categoryName(s) === name).sort((a, b) => songOrder(a) - songOrder(b) || Number(a.id) - Number(b.id));
+      const all = songsInCategory(name);
       const rows = all.map((s, i) => ({ ...s, displayNo: i + 1 })).filter(s => !q || (/^\d+$/.test(q) ? String(s.displayNo) === q : (s.title + ' ' + (s.author || '')).toLowerCase().includes(q)));
       $('categorySongCount').textContent = `${all.length} ${all.length === 1 ? 'Song' : 'Songs'}`;
       $('list').innerHTML = rows.length ? rows.map(s => `<div class="song" tabindex="0" aria-label="Open song ${s.displayNo}: ${esc(s.title)}" draggable="${canEdit() ? 'true' : 'false'}" data-song-row="${esc(s.id)}">${canEdit() ? '<span class="drag-handle" title="Drag to reorder">☷</span>' : ''}<span class="num">${s.displayNo}.</span><span class="t">${esc(s.title)}${(s.author || s.scale) ? `<span class="meta">${s.author ? `<small class="s-au">${esc(s.author)}</small>` : ''}${s.scale ? `<small class="s-sc">Scale: ${esc(s.scale)}</small>` : ''}</span>` : ''}</span>${canEdit() ? `<div class="acts"><button data-e="${esc(s.id)}">Edit</button><button class="d" data-d="${esc(s.id)}">Delete</button></div>` : ''}</div>`).join('') : `<div class="empty">${ready ? 'No songs found.' : note}</div>`;
@@ -1204,11 +1231,12 @@
     function openSong(id, preserveListPosition = false) {
       const s = songs.find(x => x.id == id); if (!s) return;
       if (!preserveListPosition) categoryScrollTop = $('list').scrollTop;
-      const ordered = songs.filter(x => categoryName(x) === categoryName(s)).sort((a, b) => songOrder(a) - songOrder(b) || Number(a.id) - Number(b.id));
-      const displayNo = ordered.findIndex(x => String(x.id) === String(s.id)) + 1;
+      const ordered = songsInCategory(categoryName(s));
+      const songIndex = ordered.findIndex(x => String(x.id) === String(s.id));
+      const displayNo = songIndex + 1;
       $('vt').textContent = `${displayNo}. ${s.title}`;
       $('vs').innerHTML = [s.author ? `<span class="view-author">Author: ${esc(s.author)}</span>` : '', s.scale ? `<span class="view-scale">Scale: ${esc(s.scale)}</span>` : ''].filter(Boolean).join(' ');
-      $('vs').style.display = $('vs').innerHTML ? '' : 'none'; $('vb').textContent = s.body || '(No lyrics added yet)'; $('vb').scrollTop = 0; $('viewEdit').dataset.songId = s.id; $('viewEdit').classList.toggle('hide', !canEdit()); show('view')
+      $('vs').style.display = $('vs').innerHTML ? '' : 'none'; $('vb').textContent = s.body || '(No lyrics added yet)'; $('vb').scrollTop = 0; $('viewEdit').dataset.songId = s.id; $('viewEdit').classList.toggle('hide', !canEdit()); $('prevSong').disabled = songIndex <= 0; $('nextSong').disabled = songIndex < 0 || songIndex >= ordered.length - 1; show('view')
     }
     function populateCategorySelect(selected) {
       $('songCategory').innerHTML = visibleCategories().map(c => `<option value="${esc(categoryDocName(c))}" ${categoryDocName(c) === selected ? 'selected' : ''}>${esc(categoryDocName(c))}</option>`).join('');
@@ -1239,6 +1267,15 @@
     $('backCategories').onclick = () => { activeCategory = null; show('dash') };
     function showCategoryAtSavedScroll() { show('categoryView'); requestAnimationFrame(() => { $('list').scrollTop = categoryScrollTop }) }
     $('exitView').onclick = showCategoryAtSavedScroll;
+    function moveSong(offset) {
+      const current = songs.find(s => String(s.id) === String($('viewEdit').dataset.songId));
+      if (!current) return;
+      const ordered = songsInCategory(categoryName(current)), index = ordered.findIndex(s => String(s.id) === String(current.id));
+      const next = ordered[index + offset];
+      if (next) openSong(next.id, true);
+    }
+    $('prevSong').onclick = () => moveSong(-1);
+    $('nextSong').onclick = () => moveSong(1);
     $('viewEdit').onclick = () => { if (!canEdit()) return; openForm($('viewEdit').dataset.songId, true) };
     $('exitForm').onclick = () => { if (formReturnView) { formReturnView = false; show('view') } else showCategoryAtSavedScroll() };
     $('save').onclick = async () => {
