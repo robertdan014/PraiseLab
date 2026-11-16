@@ -1,513 +1,1533 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PraiseLab</title>
-<link rel="icon" type="image/png" sizes="192x192" href="/icons/praiselab-icon-192-v2.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/icons/praiselab-icon-512-v2.png">
-<style>
-:root{--bg:#f6f1e7;--card:#fffdf8;--tx:#1d2a44;--mu:#6b7488;--ac:#1f3a6e;--acx:#fff;--bd:#e2d8c0;--dg:#a32a2a;--gold:#c49a2c;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-:root[data-theme="dark"]{--bg:#0f1a30;--card:#172646;--tx:#f3ecd8;--mu:#9aa6c0;--ac:#e0b64e;--acx:#0f1a30;--bd:#2a3c63;--dg:#f2827a;--gold:#e0b64e;color-scheme:dark}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 Georgia,'Times New Roman',serif}
-.hide{display:none!important}
-.wrap{max-width:720px;margin:0 auto;padding:16px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--gold)}
-h1{font-size:24px;margin:0;color:var(--ac);display:flex;align-items:center;gap:10px}
-.logo{width:42px;height:42px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.25)}
-.hr{display:flex;gap:8px;align-items:center}
-button,select{font:inherit;font-family:system-ui,sans-serif;font-size:14px;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;padding:7px 12px}
-button.p{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:600}
-button.d{color:var(--dg)}
-button:disabled{opacity:.6}
-input,textarea{width:100%;font:inherit;font-family:system-ui,sans-serif;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
-textarea{min-height:220px;resize:vertical}
-.sbar{position:relative;margin-bottom:16px}#search{padding-right:96px}#sbtn{position:absolute;right:5px;top:5px;bottom:5px;padding:0 14px}
-#list{display:grid;gap:8px;grid-template-columns:1fr}
-.song{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:10px;border-left:4px solid var(--gold);padding:10px 12px;position:relative}
-.song.hs{padding-top:30px}
-.num{color:var(--gold);font-family:system-ui,sans-serif;font-size:13px;font-weight:700;min-width:34px}
-.t{flex:1;cursor:pointer;font-size:17px;min-width:0}
-:root{--c-au:#1f6f8b;--c-sc:#b45a00}:root[data-theme="dark"]{--c-au:#6ec3e0;--c-sc:#ffb454}.meta{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px;font-family:system-ui,sans-serif}.s-au{font-size:13px;font-weight:600;color:var(--c-au)}.s-sc{font-size:12px;font-weight:700;color:var(--c-sc);background:color-mix(in srgb,var(--c-sc) 10%,var(--card));border:1px solid color-mix(in srgb,var(--c-sc) 38%,var(--bd));border-radius:999px;padding:1px 9px;display:inline-flex;align-items:center}
- .view-author{color:var(--c-au);font-weight:700}.view-scale{display:inline-flex;color:var(--c-sc);background:color-mix(in srgb,var(--c-sc) 10%,var(--card));border:1px solid color-mix(in srgb,var(--c-sc) 38%,var(--bd));border-radius:999px;padding:2px 10px;font-weight:700;margin-left:5px}
-.au{display:block;font-size:13px;color:var(--mu);font-family:system-ui,sans-serif}
-.scale{position:absolute;top:6px;right:10px;font-family:system-ui,sans-serif;font-size:12px;font-weight:600;color:var(--ac);background:var(--bg);border:1px solid var(--gold);border-radius:999px;padding:1px 10px}
-.acts{display:flex;gap:6px}.acts button{padding:5px 9px;font-size:13px}
-.empty,.mu{color:var(--mu);font-family:system-ui,sans-serif}.empty{text-align:center;padding:30px 0;grid-column:1/-1}
-.panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:14px}
-.panel h2{margin:0 0 12px;font-size:22px}
-.c{text-align:center}
-pre{white-space:pre-wrap;font:inherit;font-size:18px;line-height:1.7;margin:12px 0 0}
-.vs{font-family:system-ui,sans-serif;font-size:14px;font-weight:600;color:var(--gold);margin:-6px 0 4px}
-label{display:block;font-family:system-ui,sans-serif;font-size:13px;color:var(--mu);margin:12px 0 4px}
-.row{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
-.rolep{display:inline-block;font-family:system-ui,sans-serif;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;border:1px solid var(--bd);color:var(--mu)}.rolep:empty{display:none}.rolep.owner{border-color:var(--gold);color:var(--gold)}.rolep.editor{border-color:var(--ac);color:var(--ac)}
-#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}#login .panel{max-width:360px;width:100%}.logo.big{width:96px;height:96px;border-radius:20px;margin-bottom:8px}
-#side{position:fixed;top:0;bottom:0;left:0;width:240px;background:var(--card);border-right:1px solid var(--bd);padding:calc(16px + env(safe-area-inset-top,0px)) 12px 16px;z-index:15;transform:translateX(-105%);transition:transform .2s;display:flex;flex-direction:column;gap:6px;font-family:system-ui,sans-serif}#side.open{transform:none}
-.nbrand{font:700 21px Georgia,serif;color:var(--ac);padding:4px 10px 14px;border-bottom:2px solid var(--gold);margin-bottom:8px}.ni{text-align:left;border:0;background:none;padding:12px;font-size:15px}.ni.on{background:var(--ac);color:var(--acx);font-weight:600}
-#scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:14;display:none}#scrim.show{display:block}
-#topbar{display:flex;align-items:center;gap:12px;padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--bd);position:sticky;top:env(safe-area-inset-top,0px);z-index:5;font-family:system-ui,sans-serif;font-weight:600}#menuBtn{font-size:18px;line-height:1;padding:6px 11px}
-#modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}#modal.show{display:flex}
-.box{background:var(--card);border-radius:12px;padding:20px;max-width:360px;width:100%}.box p{margin:0 0 16px}.box .row{justify-content:flex-end}
-#srcov{position:fixed;inset:0;background:var(--bg);z-index:30;display:none;flex-direction:column;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px))}#srcov.show{display:flex}#srcov pre{flex:1;overflow:auto;margin:10px 0 0;padding:12px;background:var(--card);border:1px solid var(--bd);border-radius:8px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre}
-#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ac);color:var(--acx);padding:9px 16px;border-radius:8px;font:14px system-ui,sans-serif;display:none;z-index:40;max-width:90%}
-@media(min-width:768px){.wrap{max-width:860px;padding:28px}h1{font-size:30px}.logo{width:50px;height:50px}.panel{padding:26px}pre{font-size:20px}}
-@media(min-width:900px){#side{transform:none}#menuBtn,#scrim{display:none!important}#app{padding-left:240px}}
-@media(min-width:1100px){.wrap{max-width:1100px}#list{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.wrap{padding:12px}h1{font-size:20px}.logo{width:36px;height:36px}.song{flex-wrap:wrap}.t{flex:1 1 calc(100% - 50px)}.acts{flex:1 0 100%}.acts button{flex:1;padding:9px 6px}pre{font-size:17px}textarea{min-height:180px}#addBtn{padding:8px 10px}.box{padding:16px}}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PraiseLab</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/praiselab-icon-192-v2.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icons/praiselab-icon-512-v2.png">
+  <style>
+    :root {
+      --bg: #f6f1e7;
+      --card: #fffdf8;
+      --tx: #1d2a44;
+      --mu: #6b7488;
+      --ac: #1f3a6e;
+      --acx: #fff;
+      --bd: #e2d8c0;
+      --dg: #a32a2a;
+      --gold: #c49a2c;
+      color-scheme: light;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
 
-.category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.category-card{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--gold);border-radius:14px;padding:17px;min-width:0;transition:transform .16s,box-shadow .16s;cursor:pointer}
-.category-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.10)}
-.category-card h2{font-size:19px;margin:0 0 4px;overflow-wrap:anywhere}
-.category-card .count{font:13px system-ui,sans-serif;color:var(--mu);margin-bottom:14px}
-.category-card .acts{justify-content:flex-end}
-.category-card .acts button{padding:6px 10px}
-#categoryHeading{font-size:24px}
-@media(max-width:520px){.category-grid{grid-template-columns:1fr}.category-card{padding:15px}}
+    :root[data-theme="dark"] {
+      --bg: #0f1a30;
+      --card: #172646;
+      --tx: #f3ecd8;
+      --mu: #9aa6c0;
+      --ac: #e0b64e;
+      --acx: #0f1a30;
+      --bd: #2a3c63;
+      --dg: #f2827a;
+      --gold: #e0b64e;
+      color-scheme: dark
+    }
 
-.type-chip{float:right;font:11px system-ui,sans-serif;border:1px solid var(--bd);border-radius:999px;padding:2px 9px;color:var(--mu);margin-top:4px;text-transform:lowercase}
-.category-card{position:relative;padding-bottom:48px}.category-card .type-chip{position:absolute;right:14px;bottom:12px;float:none;margin:0}.category-card .acts{position:absolute;left:14px;bottom:10px}
-.user-access-table{width:100%;min-width:760px;border-collapse:collapse;font:14px system-ui,sans-serif;table-layout:fixed}.user-access-table th:nth-child(1){width:27%}.user-access-table th:nth-child(2){width:19%}.user-access-table th:nth-child(3){width:54%}.user-access-table th,.user-access-table td{padding:10px 8px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}.user-access-table select{width:100%;max-width:100%;min-width:110px;padding:7px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:8px}.cat-checks{display:flex;flex-direction:column;gap:6px;margin:0 0 10px}.cat-check{display:flex;align-items:center;gap:9px;margin:0;padding:7px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:14px system-ui,sans-serif;cursor:pointer}.cat-check input{width:18px;height:18px;margin:0;flex:none;accent-color:var(--ac);cursor:pointer}.cat-check span{overflow-wrap:anywhere}.give-access{padding:8px 16px}.give-access:disabled{opacity:.45;cursor:not-allowed}#accessPopup{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}#accessPopup.show{display:flex}#accessPopup .box{text-align:center}#accessPopup .tick{font-size:38px;line-height:1;margin-bottom:8px}
-#catEditor{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:25}#catEditor.show{display:flex}#catEditor .box{max-width:420px}
-.song[draggable="true"]{cursor:grab}.song.dragging{opacity:.45}.song.drop-target{outline:2px dashed var(--gold)}.drag-handle{font:18px system-ui,sans-serif;color:var(--mu);padding:0 6px;cursor:grab;user-select:none}
-</style>
+    * {
+      box-sizing: border-box
+    }
 
-<meta name="theme-color" content="#14213d">
-<meta name="description" content="PraiseLab — Christian Songbook">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" sizes="192x192" href="/icons/praiselab-icon-192-v2.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/icons/praiselab-icon-192-v2.png">
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--tx);
+      font: 16px/1.5 Georgia, 'Times New Roman', serif
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden
+    }
+
+    .hide {
+      display: none !important
+    }
+
+    .wrap {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px
+    }
+
+    #topbar {
+      flex: 0 0 auto
+    }
+
+    #themeBtn {
+      flex: 0 0 auto;
+      margin-left: auto
+    }
+
+    #dash {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0
+    }
+
+    #dash > header {
+      flex: 0 0 auto
+    }
+
+    #categoryGrid {
+      flex: 1;
+      min-height: 0;
+      align-content: start;
+      overflow-y: auto;
+      overscroll-behavior: contain
+    }
+
+    #categoryView,
+    #view {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0
+    }
+
+    #categoryView > .row,
+    #categoryView > header,
+    #view > .row {
+      flex: 0 0 auto
+    }
+
+    #categoryView > header {
+      align-items: flex-start;
+      flex-direction: column
+    }
+
+    #categoryView > header .hr {
+      flex-wrap: wrap
+    }
+
+    #list {
+      flex: 1;
+      min-height: 0;
+      align-content: start;
+      overflow-y: auto;
+      overscroll-behavior: contain
+    }
+
+    #view > .panel {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden
+    }
+
+    #vb {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gold)
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0;
+      color: var(--ac);
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .25)
+    }
+
+    .hr {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    button,
+    select {
+      font: inherit;
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid var(--bd);
+      background: var(--card);
+      color: var(--tx);
+      border-radius: 8px;
+      padding: 7px 12px
+    }
+
+    button.p {
+      background: var(--ac);
+      color: var(--acx);
+      border-color: var(--ac);
+      font-weight: 600
+    }
+
+    button.d {
+      color: var(--dg)
+    }
+
+    button:disabled {
+      opacity: .6
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      font: inherit;
+      font-family: system-ui, sans-serif;
+      padding: 10px;
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--tx)
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical
+    }
+
+    .sbar {
+      position: relative;
+      margin-bottom: 16px
+    }
+
+    #search {
+      padding-right: 96px
+    }
+
+    #sbtn {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      bottom: 5px;
+      padding: 0 14px
+    }
+
+    #list {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: 1fr
+    }
+
+    .song {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      border-left: 4px solid var(--gold);
+      padding: 10px 12px;
+      position: relative;
+      cursor: pointer
+    }
+
+    .song.hs {
+      padding-top: 30px
+    }
+
+    .num {
+      color: var(--gold);
+      font-family: system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      min-width: 34px
+    }
+
+    .t {
+      flex: 1;
+      cursor: pointer;
+      font-size: 17px;
+      min-width: 0
+    }
+
+    :root {
+      --c-au: #1f6f8b;
+      --c-sc: #b45a00
+    }
+
+    :root[data-theme="dark"] {
+      --c-au: #6ec3e0;
+      --c-sc: #ffb454
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      margin-top: 2px;
+      font-family: system-ui, sans-serif
+    }
+
+    .s-au {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--c-au)
+    }
+
+    .s-sc {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--c-sc);
+      background: color-mix(in srgb, var(--c-sc) 10%, var(--card));
+      border: 1px solid color-mix(in srgb, var(--c-sc) 38%, var(--bd));
+      border-radius: 999px;
+      padding: 1px 9px;
+      display: inline-flex;
+      align-items: center
+    }
+
+    .view-author {
+      color: var(--c-au);
+      font-weight: 700
+    }
+
+    .view-scale {
+      display: inline-flex;
+      color: var(--c-sc);
+      background: color-mix(in srgb, var(--c-sc) 10%, var(--card));
+      border: 1px solid color-mix(in srgb, var(--c-sc) 38%, var(--bd));
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-weight: 700;
+      margin-left: 5px
+    }
+
+    .au {
+      display: block;
+      font-size: 13px;
+      color: var(--mu);
+      font-family: system-ui, sans-serif
+    }
+
+    .scale {
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      font-family: system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ac);
+      background: var(--bg);
+      border: 1px solid var(--gold);
+      border-radius: 999px;
+      padding: 1px 10px
+    }
+
+    .acts {
+      display: flex;
+      gap: 6px
+    }
+
+    .acts button {
+      padding: 5px 9px;
+      font-size: 13px
+    }
+
+    .empty,
+    .mu {
+      color: var(--mu);
+      font-family: system-ui, sans-serif
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px 0;
+      grid-column: 1/-1
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 14px
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 22px
+    }
+
+    .c {
+      text-align: center
+    }
+
+    pre {
+      white-space: pre-wrap;
+      font: inherit;
+      font-size: 18px;
+      line-height: 1.7;
+      margin: 12px 0 0
+    }
+
+    .vs {
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gold);
+      margin: -6px 0 4px
+    }
+
+    label {
+      display: block;
+      font-family: system-ui, sans-serif;
+      font-size: 13px;
+      color: var(--mu);
+      margin: 12px 0 4px
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .rolep {
+      display: inline-block;
+      font-family: system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--bd);
+      color: var(--mu)
+    }
+
+    .rolep:empty {
+      display: none
+    }
+
+    .rolep.owner {
+      border-color: var(--gold);
+      color: var(--gold)
+    }
+
+    .rolep.editor {
+      border-color: var(--ac);
+      color: var(--ac)
+    }
+
+    .users-owner-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px
+    }
+
+    .users-total {
+      white-space: nowrap
+    }
+
+    #login {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px
+    }
+
+    #login .panel {
+      max-width: 360px;
+      width: 100%
+    }
+
+    .logo.big {
+      width: 96px;
+      height: 96px;
+      border-radius: 20px;
+      margin-bottom: 8px
+    }
+
+    #side {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 240px;
+      background: var(--card);
+      border-right: 1px solid var(--bd);
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 12px 16px;
+      z-index: 15;
+      transform: translateX(-105%);
+      transition: transform .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-family: system-ui, sans-serif
+    }
+
+    #side.open {
+      transform: none
+    }
+
+    .nbrand {
+      font: 700 21px Georgia, serif;
+      color: var(--ac);
+      padding: 4px 10px 14px;
+      border-bottom: 2px solid var(--gold);
+      margin-bottom: 8px
+    }
+
+    .ni {
+      text-align: left;
+      border: 0;
+      background: none;
+      padding: 12px;
+      font-size: 15px
+    }
+
+    .ni.on {
+      background: var(--ac);
+      color: var(--acx);
+      font-weight: 600
+    }
+
+    #scrim {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .4);
+      z-index: 14;
+      display: none
+    }
+
+    #scrim.show {
+      display: block
+    }
+
+    #topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 14px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--bd);
+      position: sticky;
+      top: env(safe-area-inset-top, 0px);
+      z-index: 5;
+      font-family: system-ui, sans-serif;
+      font-weight: 600
+    }
+
+    #menuBtn {
+      font-size: 18px;
+      line-height: 1;
+      padding: 6px 11px
+    }
+
+    #modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 20
+    }
+
+    #modal.show {
+      display: flex
+    }
+
+    .box {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 360px;
+      width: 100%
+    }
+
+    .box p {
+      margin: 0 0 16px
+    }
+
+    .box .row {
+      justify-content: flex-end
+    }
+
+    #srcov {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 30;
+      display: none;
+      flex-direction: column;
+      padding: calc(12px + env(safe-area-inset-top, 0px)) 12px calc(12px + env(safe-area-inset-bottom, 0px))
+    }
+
+    #srcov.show {
+      display: flex
+    }
+
+    #srcov pre {
+      flex: 1;
+      overflow: auto;
+      margin: 10px 0 0;
+      padding: 12px;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace;
+      white-space: pre
+    }
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      transform: translateX(-50%);
+      background: var(--ac);
+      color: var(--acx);
+      padding: 9px 16px;
+      border-radius: 8px;
+      font: 14px system-ui, sans-serif;
+      display: none;
+      z-index: 40;
+      max-width: 90%
+    }
+
+    @media(min-width:768px) {
+      .wrap {
+        max-width: 860px;
+        padding: 28px
+      }
+
+      h1 {
+        font-size: 30px
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px
+      }
+
+      .panel {
+        padding: 26px
+      }
+
+      pre {
+        font-size: 20px
+      }
+    }
+
+    @media(min-width:900px) {
+      #side {
+        transform: none
+      }
+
+      #menuBtn,
+      #scrim {
+        display: none !important
+      }
+
+      #app {
+        padding-left: 240px
+      }
+    }
+
+    @media(min-width:1100px) {
+      .wrap {
+        max-width: 1100px
+      }
+
+      #list {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    @media(max-width:520px) {
+      .wrap {
+        padding: 12px
+      }
+
+      h1 {
+        font-size: 20px
+      }
+
+      .logo {
+        width: 36px;
+        height: 36px
+      }
+
+      .song {
+        flex-wrap: wrap
+      }
+
+      .t {
+        flex: 1 1 calc(100% - 50px)
+      }
+
+      .acts {
+        flex: 1 0 100%
+      }
+
+      .acts button {
+        flex: 1;
+        padding: 9px 6px
+      }
+
+      pre {
+        font-size: 17px
+      }
+
+      textarea {
+        min-height: 180px
+      }
+
+      #addBtn {
+        padding: 8px 10px
+      }
+
+      .box {
+        padding: 16px
+      }
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px
+    }
+
+    .category-card {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-left: 4px solid var(--gold);
+      border-radius: 14px;
+      padding: 17px;
+      min-width: 0;
+      transition: transform .16s, box-shadow .16s;
+      cursor: pointer
+    }
+
+    .category-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .10)
+    }
+
+    .category-card h2 {
+      font-size: 19px;
+      margin: 0 0 4px;
+      overflow-wrap: anywhere
+    }
+
+    .category-card .count {
+      font: 13px system-ui, sans-serif;
+      color: var(--mu);
+      margin-bottom: 14px
+    }
+
+    .category-card .acts {
+      justify-content: flex-end
+    }
+
+    .category-card .acts button {
+      padding: 6px 10px
+    }
+
+    #categoryHeading {
+      font-size: 24px
+    }
+
+    @media(max-width:520px) {
+      .category-grid {
+        grid-template-columns: 1fr
+      }
+
+      .category-card {
+        padding: 15px
+      }
+    }
+
+    .type-chip {
+      float: right;
+      font: 11px system-ui, sans-serif;
+      border: 1px solid var(--bd);
+      border-radius: 999px;
+      padding: 2px 9px;
+      color: var(--mu);
+      margin-top: 4px;
+      text-transform: lowercase
+    }
+
+    .category-card {
+      position: relative;
+      padding-bottom: 48px
+    }
+
+    .category-card .type-chip {
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
+      float: none;
+      margin: 0
+    }
+
+    .category-card .acts {
+      position: absolute;
+      left: 14px;
+      bottom: 10px
+    }
+
+    .user-access-table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font: 14px system-ui, sans-serif;
+      table-layout: fixed
+    }
+
+    .user-access-table th:nth-child(1) {
+      width: 27%
+    }
+
+    .user-access-table th:nth-child(2) {
+      width: 19%
+    }
+
+    .user-access-table th:nth-child(3) {
+      width: 54%
+    }
+
+    .user-access-table th,
+    .user-access-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--bd);
+      text-align: left;
+      vertical-align: top
+    }
+
+    .user-access-table select {
+      width: 100%;
+      max-width: 100%;
+      min-width: 110px;
+      padding: 7px;
+      background: var(--bg);
+      color: var(--tx);
+      border: 1px solid var(--bd);
+      border-radius: 8px
+    }
+
+    .cat-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 0 0 10px
+    }
+
+    .cat-check {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0;
+      padding: 7px 9px;
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--tx);
+      font: 14px system-ui, sans-serif;
+      cursor: pointer
+    }
+
+    .cat-check input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      flex: none;
+      accent-color: var(--ac);
+      cursor: pointer
+    }
+
+    .cat-check span {
+      overflow-wrap: anywhere
+    }
+
+    .give-access {
+      padding: 8px 16px
+    }
+
+    .give-access:disabled {
+      opacity: .45;
+      cursor: not-allowed
+    }
+
+    #accessPopup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50
+    }
+
+    #accessPopup.show {
+      display: flex
+    }
+
+    #accessPopup .box {
+      text-align: center
+    }
+
+    #accessPopup .tick {
+      font-size: 38px;
+      line-height: 1;
+      margin-bottom: 8px
+    }
+
+    #catEditor {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 25
+    }
+
+    #catEditor.show {
+      display: flex
+    }
+
+    #catEditor .box {
+      max-width: 420px
+    }
+
+    .song[draggable="true"] {
+      cursor: grab
+    }
+
+    .song.dragging {
+      opacity: .45
+    }
+
+    .song.drop-target {
+      outline: 2px dashed var(--gold)
+    }
+
+    .drag-handle {
+      font: 18px system-ui, sans-serif;
+      color: var(--mu);
+      padding: 0 6px;
+      cursor: grab;
+      user-select: none
+    }
+  </style>
+
+  <meta name="theme-color" content="#14213d">
+  <meta name="description" content="PraiseLab — Christian Songbook">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/praiselab-icon-192-v2.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/praiselab-icon-192-v2.png">
 
 
 </head>
+
 <body>
-<div id="login" class="hide"><div class="panel c"><img class="logo big" alt="" src="data:image/jpeg;base64,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"><h2>PraiseLab</h2><p class="mu">Christian songbook. Please sign in to continue.</p><button class="p" id="gbtn">Sign in with Google</button><p id="cfg" class="mu hide" style="margin-top:14px"></p></div></div>
+  <div id="login" class="hide">
+    <div class="panel c"><img class="logo big" alt=""
+        src="data:image/jpeg;base64,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">
+      <h2>PraiseLab</h2>
+      <p class="mu">Christian songbook. Please sign in to continue.</p><button class="p" id="gbtn">Sign in with
+        Google</button>
+      <p id="cfg" class="mu hide" style="margin-top:14px"></p>
+    </div>
+  </div>
 
-<div id="app" class="hide">
-<nav id="side"><div class="nbrand">PraiseLab</div><button class="ni on" data-go="dash">🏠 Home</button><button class="ni" data-go="aboutsec">ℹ️ About</button><button class="ni" data-go="usersec">👤 User details</button><button class="ni own hide" data-go="userssec">👥 Users</button><button class="ni" data-go="otherssec">🗂️ Others</button></nav>
-<div id="scrim"></div>
-<div id="topbar"><button id="menuBtn" aria-label="Open menu">☰</button><span id="pt">Home</span><span id="role" class="rolep" style="margin-left:auto"></span></div>
-<div class="wrap">
+  <div id="app" class="hide">
+    <nav id="side">
+      <div class="nbrand">PraiseLab</div>
+      <button class="ni on" data-go="dash">🏠 Home</button>
+      <button class="ni" data-go="usersec">👤 User details</button>
+      <button class="ni own hide" data-go="userssec">👥 Users</button>
+      <button class="ni" data-go="aboutsec">ℹ️ About</button>
+      <button class="ni" data-go="otherssec">🗂️Others</button>
+    </nav>
+    <div id="scrim"></div>
+    <div id="topbar"><button id="menuBtn" aria-label="Open menu">☰</button><span id="pt">Home</span><button
+        id="themeBtn" aria-label="Switch theme">🌙</button><span id="role" class="rolep"></span></div>
+    <div class="wrap">
 
-<section id="dash">
-  <header><h1><img class="logo" alt="" src="data:image/jpeg;base64,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">PraiseLab</h1><div class="hr"><button id="themeBtn" aria-label="Switch theme">🌙</button><button class="p hide" id="addCategoryBtn">+ Add Category</button></div></header>
-  <div id="categoryGrid" class="category-grid"></div>
-</section>
+      <section id="dash">
+        <header>
+          <h1><img class="logo" alt=""
+              src="data:image/jpeg;base64,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">PraiseLab
+          </h1>
+          <div class="hr"><button class="p hide" id="addCategoryBtn">+ Add Category</button></div>
+        </header>
+        <div id="categoryGrid" class="category-grid"></div>
+      </section>
 
-<section id="categoryView" class="hide">
-  <div class="row" style="margin-bottom:12px"><button id="backCategories">← Back</button><span class="mu" id="categorySongCount"></span></div>
-  <header><h1 id="categoryHeading">Songs</h1><div class="hr"><button class="p hide" id="addBtn">+ Add Song</button><button class="hide" id="bulkUploadBtn">⬆ Upload JSON</button><input type="file" id="bulkUploadFile" accept=".json,application/json" class="hide"></div></header>
-  <div class="sbar"><input id="search" type="text" placeholder="Search songs by number, title or author…" autocomplete="off"><button class="p" id="sbtn">Search</button></div>
-  <div id="list"></div>
-</section>
-<section id="view" class="hide"><div class="row" style="margin-bottom:12px"><button id="exitView">← Back to songs</button></div><div class="panel"><h2 id="vt"></h2><div id="vs" class="vs"></div><pre id="vb"></pre></div></section>
+      <section id="categoryView" class="hide">
+        <div class="row" style="margin-bottom:12px"><button id="backCategories">← Back</button><span class="mu"
+            id="categorySongCount"></span></div>
+        <header class="category-header">
+          <h1 id="categoryHeading">Songs</h1>
+          <div class="hr"><button class="p hide" id="addBtn">+ Add Song</button><button class="hide"
+              id="bulkUploadBtn">⬆ Upload JSON</button><input type="file" id="bulkUploadFile"
+              accept=".json,application/json" class="hide"></div>
+        </header>
+        <div class="sbar"><input id="search" type="text" placeholder="Search songs by number, title or author…"
+            autocomplete="off"><button class="p" id="sbtn">Search</button></div>
+        <div id="list"></div>
+      </section>
+      <section id="view" class="hide">
+        <div class="row" style="margin-bottom:12px"><button id="exitView">← Back to songs</button></div>
+        <div class="panel">
+          <div class="row" style="margin-bottom:12px"><h2 id="vt" style="margin:0"></h2><button class="p hide"
+              id="viewEdit" type="button" aria-label="Edit song" title="Edit song">✏️</button></div>
+          <div id="vs" class="vs"></div>
+          <pre id="vb"></pre>
+        </div>
+      </section>
 
-<section id="form" class="hide"><div class="panel"><h2 id="ft">Add song</h2>
-  <label for="ti">Title</label><input id="ti" maxlength="80">
-  <label for="au">Author (optional)</label><input id="au" maxlength="60" placeholder="e.g. John Newton">
-  <label for="sc">Scale / Key (optional)</label><input id="sc" maxlength="12" placeholder="e.g. C, G, D minor">
-  <label for="ly">Lyrics</label><textarea id="ly"></textarea>
-  <label for="songCategory">Category</label><select id="songCategory" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx)"></select>
-  <p id="err" class="hide" style="color:var(--dg);font-family:system-ui,sans-serif;font-size:14px;margin:8px 0 0">Please enter a title.</p>
-  <div class="row" style="margin-top:14px"><button id="exitForm">Exit</button><button class="p" id="save">Save song</button></div></div></section>
+      <section id="form" class="hide">
+        <div class="panel">
+          <h2 id="ft">Add song</h2>
+          <label for="ti">Title</label><input id="ti" maxlength="80">
+          <label for="au">Author (optional)</label><input id="au" maxlength="60" placeholder="e.g. John Newton">
+          <label for="sc">Scale / Key (optional)</label><input id="sc" maxlength="12" placeholder="e.g. C, G, D minor">
+          <label for="ly">Lyrics</label><textarea id="ly"></textarea>
+          <label for="songCategory">Category</label><select id="songCategory"
+            style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx)"></select>
+          <p id="err" class="hide"
+            style="color:var(--dg);font-family:system-ui,sans-serif;font-size:14px;margin:8px 0 0">Please enter a title.
+          </p>
+          <div class="row" style="margin-top:14px"><button id="exitForm">Exit</button><button class="p" id="save">Save
+              song</button></div>
+        </div>
+      </section>
 
-<section id="aboutsec" class="hide">
-  <div class="panel c"><h2 style="margin:0 0 2px">PraiseLab</h2><p class="mu" style="margin:0 0 18px;font-size:13px">Christian songbook app</p><p class="mu" style="margin:0 0 2px;font-size:13px">Developed by</p><p style="font-size:21px;font-weight:700;margin:0 0 12px">Robert Ravindra</p><p style="font-family:system-ui,sans-serif;line-height:1.9;margin:0">📞 <a href="tel:+918970782959" style="color:var(--ac)">8970782959</a><br>📍 Bengaluru</p></div>
-  <div class="panel own hide"><h2 style="font-size:18px;margin:0 0 6px">Code view</h2><p class="mu" style="margin:0 0 12px;font-size:14px">See the source code of this app. Only the owner sees this.</p><button id="srcBtn">&lt;/&gt; View code</button></div>
-</section>
+      <section id="aboutsec" class="hide">
+        <div class="panel c">
+          <h2 style="margin:0 0 2px">PraiseLab</h2>
+          <p class="mu" style="margin:0 0 18px;font-size:13px">Christian songbook library</p>
+          <p class="mu" style="margin:0 0 2px;font-size:13px">Developed by</p>
+          <p style="font-size:21px;font-weight:700;margin:0 0 12px">Robert Ravindra</p>
+          <p style="font-family:system-ui,sans-serif;line-height:1.9;margin:0">📞 <a href="tel:+918970782959"
+              style="color:var(--ac)">8970782959</a><br>📍 Bengaluru</p>
+        </div>
+        <div class="panel own hide">
+          <h2 style="font-size:18px;margin:0 0 6px">Code view</h2>
+          <p class="mu" style="margin:0 0 12px;font-size:14px">See the source code of this app. Only the owner sees
+            this.</p><button id="srcBtn">&lt;/&gt; View code</button>
+        </div>
+      </section>
 
-<section id="usersec" class="hide"><div class="panel"><h2>User details</h2><div id="udet"></div></div></section>
+      <section id="usersec" class="hide">
+        <div class="panel">
+          <h2>User details</h2>
+          <div id="udet"></div>
+        </div>
+      </section>
 
-<section id="userssec" class="hide"><div class="panel"><h2>Users & category access</h2><p class="mu" style="margin:0 0 12px">Choose each user's role and grant access to specific categories. General categories are available to all viewers by default.</p><input id="userSearch" type="search" placeholder="Search users by name or email…" autocomplete="off" style="margin:0 0 14px"><div id="ulist"></div></div></section>
+      <section id="userssec" class="hide">
+        <div class="panel">
+          <h2>Users & category access</h2>
+          <p class="mu" style="margin:0 0 12px">Choose each user's role and grant access to specific categories. General
+            categories are available to all viewers by default.</p><input id="userSearch" type="search"
+            placeholder="Search users by name or email…" autocomplete="off" style="margin:0 0 14px">
+          <div id="ulist"></div>
+        </div>
+      </section>
 
-<section id="otherssec" class="hide"><div class="panel"><h2>Others</h2><p id="bkNote" class="mu" style="margin:0">Backup and restore are available to the owner and editors only.</p>
-  <div id="bk" class="row hide" style="justify-content:flex-start"><button id="bkDl">⬇ Download backup</button><button id="bkRs">⬆ Restore backup</button><input type="file" id="bkFile" accept=".json,application/json" class="hide"></div></div></section>
+      <section id="otherssec" class="hide">
+        <div class="panel">
+          <h2>Others</h2>
+          <p id="bkNote" class="mu" style="margin:0">Backup and restore are available to the owner and editors only.</p>
+          <div id="bk" class="row hide" style="justify-content:flex-start"><button id="bkDl">⬇ Download
+              backup</button><button id="bkRs">⬆ Restore backup</button><input type="file" id="bkFile"
+              accept=".json,application/json" class="hide"></div>
+        </div>
+      </section>
 
-</div></div>
+    </div>
+  </div>
 
-<div id="catEditor"><div class="box"><h2 id="catEditorTitle">Add category</h2><label for="catName">Category name</label><input id="catName" maxlength="70"><label for="catType">Type</label><select id="catType" style="width:100%"><option value="general">General</option><option value="specific">Specific</option></select><div class="row" style="margin-top:18px"><button id="catCancel">Cancel</button><button class="p" id="catSave">Save category</button></div></div></div>
-<div id="modal"><div class="box"><p id="mt"></p><div class="row"><button id="mno">Cancel</button><button class="p" id="myes">Yes, continue</button></div></div></div>
-<div id="srcov"><div class="row"><strong>PraiseLab source code</strong><span><button id="srcCopy">Copy</button> <button class="p" id="srcClose">Close</button></span></div><pre id="srcpre"></pre></div>
-<div id="accessPopup" role="dialog" aria-modal="true" aria-labelledby="apMsg"><div class="box"><div class="tick">✅</div><p id="apMsg"><b>Access provided</b></p><div class="row" style="justify-content:center"><button class="p" id="apOk">OK</button></div></div></div>
-<div id="toast"></div>
+  <div id="catEditor">
+    <div class="box">
+      <h2 id="catEditorTitle">Add category</h2><label for="catName">Category name</label><input id="catName"
+        maxlength="70"><label for="catType">Type</label><select id="catType" style="width:100%">
+        <option value="general">General</option>
+        <option value="specific">Specific</option>
+      </select>
+      <div class="row" style="margin-top:18px"><button id="catCancel">Cancel</button><button class="p" id="catSave">Save
+          category</button></div>
+    </div>
+  </div>
+  <div id="modal">
+    <div class="box">
+      <p id="mt"></p>
+      <div class="row"><button id="mno">Cancel</button><button class="p" id="myes">Yes, continue</button></div>
+    </div>
+  </div>
+  <div id="srcov">
+    <div class="row"><strong>PraiseLab source code</strong><span><button id="srcCopy">Copy</button> <button class="p"
+          id="srcClose">Close</button></span></div>
+    <pre id="srcpre"></pre>
+  </div>
+  <div id="accessPopup" role="dialog" aria-modal="true" aria-labelledby="apMsg">
+    <div class="box">
+      <div class="tick">✅</div>
+      <p id="apMsg"><b>Access provided</b></p>
+      <div class="row" style="justify-content:center"><button class="p" id="apOk">OK</button></div>
+    </div>
+  </div>
+  <div id="toast"></div>
 
-<script type="module">
-import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithRedirect,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,onSnapshot,setDoc,updateDoc,deleteDoc,serverTimestamp,writeBatch,query,where} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+    import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc, onSnapshot, setDoc, updateDoc, deleteDoc, serverTimestamp, writeBatch, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const CONFIG={apiKey:'AIzaSyAoyjQyWOoe7a2VAqZO13T1BFPrVFh_0WY',authDomain:'praiselab-a4b9c.firebaseapp.com',projectId:'praiselab-a4b9c',appId:'1:274601624596:web:f8450ef3acae2ab51b9301'};
-const OWNER_EMAIL='robertdan1996@gmail.com';
+    const CONFIG = { apiKey: 'AIzaSyAoyjQyWOoe7a2VAqZO13T1BFPrVFh_0WY', authDomain: 'praiselab-a4b9c.firebaseapp.com', projectId: 'praiselab-a4b9c', appId: '1:274601624596:web:f8450ef3acae2ab51b9301' };
+    const OWNER_EMAIL = 'robertdan1996@gmail.com';
 
-const $=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let songs=[],categories=[],editId=null,role='Viewer',me=null,editors=new Set(),usersList=[],accessList=new Map(),myAccess=[],ready=false,note='Loading songs…',unsubs=[],songUnsubs=[],activeCategory=null,categoryEditId=null,dragSongId=null;
-const canEdit=()=>role==='Owner'||role==='Editor';
-const OWN=OWNER_EMAIL.toLowerCase();
-const DEFAULT_CATEGORIES=[
-  {id:'church-songs',name:'🎵 Church Songs'},
-  {id:'christmas-songs',name:'🎄 Christmas Songs'},
-  {id:'special-songs',name:'⭐ Special Songs'},
-  {id:'hymnals',name:'📖 Hymnals'}
-];
-const categoryName=s=>s.category||'🎵 Church Songs';
-const categoryType=c=>(c.type==='specific'?'specific':'general');
-const songOrder=s=>Number.isFinite(Number(s.order))?Number(s.order):Number(s.id)||0;
-const visibleCategories=()=>role==='Owner'?categories:categories.filter(c=>categoryType(c)==='general'||myAccess.includes(c.id));
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    let songs = [], categories = [], editId = null, role = 'Viewer', me = null, editors = new Set(), usersList = [], accessList = new Map(), myAccess = [], ready = false, note = 'Loading songs…', unsubs = [], songUnsubs = [], activeCategory = null, categoryEditId = null, dragSongId = null, categoryScrollTop = 0, formReturnView = false;
+    const canEdit = () => role === 'Owner' || role === 'Editor';
+    const OWN = OWNER_EMAIL.toLowerCase();
+    const DEFAULT_CATEGORIES = [
+      { id: 'church-songs', name: '🎵 Church Songs' },
+      { id: 'christmas-songs', name: '🎄 Christmas Songs' },
+      { id: 'special-songs', name: '⭐ Special Songs' },
+      { id: 'hymnals', name: '📖 Hymnals' }
+    ];
+    const categoryName = s => s.category || '🎵 Church Songs';
+    const categoryType = c => (c.type === 'specific' ? 'specific' : 'general');
+    const songOrder = s => Number.isFinite(Number(s.order)) ? Number(s.order) : Number(s.id) || 0;
+    const visibleCategories = () => role === 'Owner' ? categories : categories.filter(c => categoryType(c) === 'general' || myAccess.includes(c.id));
 
-const root=document.documentElement;
-try{root.dataset.theme=localStorage.getItem('praiselab-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){root.dataset.theme='light'}
-const paintTheme=()=>$('themeBtn').textContent=root.dataset.theme==='dark'?'☀️':'🌙';
-$('themeBtn').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('praiselab-theme',root.dataset.theme)}catch(e){}paintTheme()};
-paintTheme();
+    const root = document.documentElement;
+    try { root.dataset.theme = localStorage.getItem('praiselab-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') } catch (e) { root.dataset.theme = 'light' }
+    const paintTheme = () => $('themeBtn').textContent = root.dataset.theme === 'dark' ? '☀️' : '🌙';
+    $('themeBtn').onclick = () => { root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark'; try { localStorage.setItem('praiselab-theme', root.dataset.theme) } catch (e) { } paintTheme() };
+    paintTheme();
 
-let tt;function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(tt);tt=setTimeout(()=>t.style.display='none',3500)}
-function confirmBox(msg,fn,yesLabel='Yes, continue'){$('mt').textContent=msg;$('myes').textContent=yesLabel;$('mno').textContent='Cancel';$('modal').classList.add('show');$('myes').onclick=()=>{$('modal').classList.remove('show');$('myes').textContent='Yes, continue';fn()};$('mno').onclick=()=>{$('modal').classList.remove('show');$('myes').textContent='Yes, continue'}}
-const TITLES={dash:'Home',categoryView:'Category',view:'Song',form:'Song',aboutsec:'About',usersec:'User details',userssec:'Users',otherssec:'Others'};
-const closeNav=()=>{$('side').classList.remove('open');$('scrim').classList.remove('show')};
-function show(name){Object.keys(TITLES).forEach(n=>$(n).classList.toggle('hide',n!==name));
-  const nav=['view','form','categoryView'].includes(name)?'dash':name;
-  document.querySelectorAll('.ni').forEach(b=>b.classList.toggle('on',b.dataset.go===nav));
-  $('pt').textContent=TITLES[name]||'Home';closeNav();window.scrollTo(0,0)}
-document.querySelectorAll('.ni').forEach(b=>b.onclick=()=>show(b.dataset.go));
-$('menuBtn').onclick=()=>{$('side').classList.add('open');$('scrim').classList.add('show')};
-$('scrim').onclick=closeNav;
-
-function categoryDocName(c){return c.name||c.id}
-function renderCategories(){
-  const grid=$('categoryGrid'),shown=visibleCategories();
-  grid.innerHTML=shown.length?shown.map(c=>{
-    const count=songs.filter(s=>categoryName(s)===categoryDocName(c)).length;
-    return `<article class="category-card" data-category="${esc(c.id)}" tabindex="0" role="button" aria-label="Open ${esc(categoryDocName(c))}">
-      <h2>${esc(categoryDocName(c))}</h2><div class="count">${count} ${count===1?'Song':'Songs'}</div>
-      ${canEdit()?`<div class="acts"><button data-cat-edit="${esc(c.id)}">Edit</button><button class="d" data-cat-delete="${esc(c.id)}">Delete</button></div><span class="type-chip">${categoryType(c)}</span>`:''}
-    </article>`;
-  }).join(''):`<div class="empty">${ready?'No categories available.':'Loading categories…'}</div>`;
-}
-function openCategoryEditor(id=null){if(!canEdit())return;categoryEditId=id;const c=categories.find(x=>x.id===id);$('catEditorTitle').textContent=c?'Edit category':'Add category';$('catName').value=c?categoryDocName(c):'';$('catType').value=c?categoryType(c):'general';$('catEditor').classList.add('show');$('catName').focus()}
-$('catCancel').onclick=()=>$('catEditor').classList.remove('show');
-$('catSave').onclick=async()=>{if(!canEdit())return;const name=$('catName').value.trim(),type=$('catType').value;if(!name){toast('Enter a category name.');return}if(categories.some(c=>c.id!==categoryEditId&&categoryDocName(c).toLowerCase()===name.toLowerCase())){toast('That category already exists.');return}try{if(categoryEditId){const c=categories.find(x=>x.id===categoryEditId),old=categoryDocName(c);categories=categories.map(x=>x.id===categoryEditId?{...x,name,type}:x).sort((a,b)=>categoryDocName(a).localeCompare(categoryDocName(b)));renderCategories();renderUsers();await updateDoc(doc(db,'categories',categoryEditId),{name,type,updatedAt:serverTimestamp()});for(const song of songs.filter(x=>categoryName(x)===old))await updateDoc(doc(db,'songs',String(song.id)),{category:name});}else{const id=name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+Date.now().toString(36);const fresh={id,name,type,createdAt:new Date()};categories=[...categories.filter(x=>x.id!==id),fresh].sort((a,b)=>categoryDocName(a).localeCompare(categoryDocName(b)));renderCategories();renderUsers();await setDoc(doc(db,'categories',id),{name,type,createdAt:serverTimestamp()})}$('catEditor').classList.remove('show');renderCategories();renderUsers();toast(categoryEditId?'Category updated.':'Category added.')}catch(e){toast('Could not save category.')}};
-$('categoryGrid').onclick=async e=>{
-  const edit=e.target.dataset.catEdit,del=e.target.dataset.catDelete;
-  if(edit){e.stopPropagation();openCategoryEditor(edit);return;}
-  if(del){e.stopPropagation();await deleteCategory(del);return}
-  const card=e.target.closest('[data-category]');if(card)openCategory(card.dataset.category);
-};
-$('categoryGrid').onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.category){e.preventDefault();openCategory(e.target.dataset.category)}};
-function openCategory(id){
-  const c=visibleCategories().find(x=>x.id===id);if(!c)return;
-  activeCategory=id;$('categoryHeading').textContent=categoryDocName(c);$('search').value='';renderSongs();show('categoryView');
-}
-function renderSongs(){
-  const c=categories.find(x=>x.id===activeCategory),name=c?categoryDocName(c):'';
-  if(c&&!visibleCategories().some(x=>x.id===c.id)){activeCategory=null;show('dash');return}
-  const q=$('search').value.trim().toLowerCase();
-  const all=[...songs].filter(s=>categoryName(s)===name).sort((a,b)=>songOrder(a)-songOrder(b)||Number(a.id)-Number(b.id));
-  const rows=all.map((s,i)=>({...s,displayNo:i+1})).filter(s=>!q||( /^\d+$/.test(q)?String(s.displayNo)===q:(s.title+' '+(s.author||'')).toLowerCase().includes(q)));
-  $('categorySongCount').textContent=`${all.length} ${all.length===1?'Song':'Songs'}`;
-  $('list').innerHTML=rows.length?rows.map(s=>`<div class="song" draggable="${canEdit()?'true':'false'}" data-song-row="${esc(s.id)}">${canEdit()?'<span class="drag-handle" title="Drag to reorder">☷</span>':''}<span class="num">${s.displayNo}.</span><span class="t" data-open="${esc(s.id)}">${esc(s.title)}${(s.author||s.scale)?`<span class="meta">${s.author?`<small class="s-au">${esc(s.author)}</small>`:''}${s.scale?`<small class="s-sc">Scale: ${esc(s.scale)}</small>`:''}</span>`:''}</span><div class="acts"><button data-v="${esc(s.id)}">View</button>${canEdit()?`<button data-e="${esc(s.id)}">Edit</button><button class="d" data-d="${esc(s.id)}">Delete</button>`:''}</div></div>`).join(''):`<div class="empty">${ready?'No songs found.':note}</div>`;
-}
-function applyLocal(list){   // show our own change instantly; the live listener confirms it
-  const m=new Map(songs.map(x=>[String(x.id),x]));
-  list.forEach(([id,patch])=>{const k=String(id);if(patch===null)m.delete(k);else m.set(k,{...(m.get(k)||{}),id:Number(id),...patch})});
-  songs=[...m.values()];renderCategories();renderSongs();
-}
-async function normalizeCategoryOrder(category,excludeId=null){const arr=songs.filter(s=>s.id!=excludeId&&categoryName(s)===category).sort((a,b)=>songOrder(a)-songOrder(b)||Number(a.id)-Number(b.id));const batch=writeBatch(db);arr.forEach((s,i)=>batch.update(doc(db,'songs',String(s.id)),{order:i+1}));applyLocal(arr.map((s,i)=>[s.id,{order:i+1}]));await batch.commit()}
-async function reorderSongs(fromId,toId){const c=categories.find(x=>x.id===activeCategory);if(!c||fromId==toId)return;const arr=songs.filter(s=>categoryName(s)===categoryDocName(c)).sort((a,b)=>songOrder(a)-songOrder(b)||Number(a.id)-Number(b.id));const from=arr.findIndex(s=>s.id==fromId),to=arr.findIndex(s=>s.id==toId);if(from<0||to<0)return;const moved=arr.splice(from,1)[0];arr.splice(to,0,moved);confirmBox(`Move song from ${from+1} to ${to+1}?`,async()=>{try{const batch=writeBatch(db);arr.forEach((s,i)=>batch.update(doc(db,'songs',String(s.id)),{order:i+1}));applyLocal(arr.map((s,i)=>[s.id,{order:i+1}]));await batch.commit();toast('Song order updated.')}catch(e){toast('Could not reorder songs.')}},'OK')}
-function openSong(id){const s=songs.find(x=>x.id==id);if(!s)return;$('vt').textContent=s.title;
-  $('vs').innerHTML=[s.author?`<span class="view-author">Author: ${esc(s.author)}</span>`:'',s.scale?`<span class="view-scale">Scale: ${esc(s.scale)}</span>`:''].filter(Boolean).join(' ');
-  $('vs').style.display=$('vs').innerHTML?'':'none';$('vb').textContent=s.body||'(No lyrics added yet)';show('view')}
-function populateCategorySelect(selected){
-  $('songCategory').innerHTML=visibleCategories().map(c=>`<option value="${esc(categoryDocName(c))}" ${categoryDocName(c)===selected?'selected':''}>${esc(categoryDocName(c))}</option>`).join('');
-}
-function openForm(id){
-  if(!canEdit())return;
-  editId=id;const s=songs.find(x=>x.id==id);$('ft').textContent=s?'Edit song':'Add song';
-  $('ti').value=s?s.title:'';$('au').value=s?(s.author||''):'';$('sc').value=s?(s.scale||''):'';$('ly').value=s?(s.body||''):'';
-  populateCategorySelect(s?categoryName(s):(categories.find(c=>c.id===activeCategory)?categoryDocName(categories.find(c=>c.id===activeCategory)):categoryName({})));
-  $('err').classList.add('hide');show('form');
-}
-$('search').oninput=renderSongs;$('sbtn').onclick=renderSongs;$('search').onkeydown=e=>{if(e.key==='Enter')renderSongs()};
-$('list').onclick=e=>{const d=e.target.dataset;
-  if(d.open||d.v)openSong(d.open||d.v);
-  else if(canEdit()&&d.e)confirmBox('Do you want to edit this song?',()=>openForm(d.e));
-  else if(canEdit()&&d.d){const s=songs.find(x=>x.id==d.d);if(s)confirmBox('Delete “'+s.title+'”? This can’t be undone.',async()=>{try{const oldCat=categoryName(s);applyLocal([[d.d,null]]);await deleteDoc(doc(db,'songs',String(d.d)));await normalizeCategoryOrder(oldCat,d.d);toast('Song deleted.')}catch(x){toast('Could not delete the song.')}})}};
-$('list').addEventListener('dragstart',e=>{const row=e.target.closest('[data-song-row]');if(!row||!canEdit())return;dragSongId=row.dataset.songRow;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',dragSongId)});
-$('list').addEventListener('dragover',e=>{const row=e.target.closest('[data-song-row]');if(!row||!dragSongId)return;e.preventDefault();document.querySelectorAll('.drop-target').forEach(x=>x.classList.remove('drop-target'));row.classList.add('drop-target')});
-$('list').addEventListener('dragleave',e=>{const row=e.target.closest('[data-song-row]');if(row&&!row.contains(e.relatedTarget))row.classList.remove('drop-target')});
-$('list').addEventListener('drop',e=>{const row=e.target.closest('[data-song-row]');if(!row||!dragSongId)return;e.preventDefault();document.querySelectorAll('.dragging,.drop-target').forEach(x=>x.classList.remove('dragging','drop-target'));const from=dragSongId;dragSongId=null;reorderSongs(from,row.dataset.songRow)});
-$('list').addEventListener('dragend',()=>{dragSongId=null;document.querySelectorAll('.dragging,.drop-target').forEach(x=>x.classList.remove('dragging','drop-target'))});
-$('addBtn').onclick=()=>openForm(null);
-$('backCategories').onclick=()=>{activeCategory=null;show('dash')};
-$('exitView').onclick=()=>show('categoryView');
-$('exitForm').onclick=()=>show('categoryView');
-$('save').onclick=async()=>{
-  if(!canEdit())return;
-  const t=$('ti').value.trim();if(!t){$('err').classList.remove('hide');return}
-  if(!$('songCategory').value){toast('Create a category before adding songs.');return}
-  const category=$('songCategory').value,categoryId=(categories.find(c=>categoryDocName(c)===category)||{}).id||'';const data={title:t,body:$('ly').value,scale:$('sc').value.trim(),author:$('au').value.trim(),category,categoryId};
-  $('save').disabled=true;
-  try{if(editId){const oldSong=songs.find(x=>x.id==editId),oldCat=categoryName(oldSong);const upd={...data,...(oldCat!==data.category?{order:songs.filter(x=>categoryName(x)===data.category).length+1}:{})};applyLocal([[editId,upd]]);await updateDoc(doc(db,'songs',String(editId)),upd);if(oldCat!==data.category)await normalizeCategoryOrder(oldCat,editId);await normalizeCategoryOrder(data.category)}
-    else{const id=songs.reduce((m,s)=>Math.max(m,Number(s.id)||0),0)+1;const order=songs.filter(s=>categoryName(s)===data.category).length+1;const nd={id,order,...data};applyLocal([[id,nd]]);await setDoc(doc(db,'songs',String(id)),nd)}
-    toast(editId?'Song updated.':'Song added.');renderSongs();show('categoryView')}
-  catch(x){toast(x&&x.code==='permission-denied'?'You do not have permission to change songs.':'Could not save. Please try again.')}
-  $('save').disabled=false;
-};
-
-$('addCategoryBtn').onclick=()=>openCategoryEditor();
-async function deleteCategory(id){
-  if(!canEdit())return;const c=categories.find(x=>x.id===id);if(!c)return;
-  const name=categoryDocName(c),contained=songs.filter(s=>categoryName(s)===name);
-  if(!contained.length){
-    confirmBox('Are you sure you want to delete this category?',async()=>{try{await deleteDoc(doc(db,'categories',id));toast('Category deleted.')}catch(e){toast('Could not delete category.')}});return;
-  }
-  const others=categories.filter(x=>x.id!==id);
-  const choice=prompt(`This category contains ${contained.length} songs.\n\nType MOVE to move songs to another category, DELETE to delete this category and all its songs, or CANCEL to keep it.`);
-  if(!choice||choice.trim().toUpperCase()==='CANCEL')return;
-  if(choice.trim().toUpperCase()==='MOVE'){
-    if(!others.length){toast('Create another category before moving these songs.');return}
-    const options=others.map((x,i)=>`${i+1}. ${categoryDocName(x)}`).join('\n');
-    const pick=prompt('Choose destination category by number:\n'+options);
-    const dest=others[Number(pick)-1];if(!dest){toast('No valid destination selected.');return}
-    confirmBox(`Move ${contained.length} songs to ${categoryDocName(dest)} and delete this category?`,async()=>{
-      try{for(const s of contained)await updateDoc(doc(db,'songs',String(s.id)),{category:categoryDocName(dest),categoryId:dest.id,order:songs.filter(x=>categoryName(x)===categoryDocName(dest)).length+contained.indexOf(s)+1});await deleteDoc(doc(db,'categories',id));toast('Songs moved and category deleted.')}
-      catch(e){toast('Could not complete category move. Please retry.')}
-    });
-  }else if(choice.trim().toUpperCase()==='DELETE'){
-    confirmBox(`Permanently delete ${contained.length} songs and this category? This cannot be undone.`,async()=>{
-      try{for(const s of contained)await deleteDoc(doc(db,'songs',String(s.id)));await deleteDoc(doc(db,'categories',id));toast('Category and its songs deleted.')}
-      catch(e){toast('Delete stopped. Some items may remain; refresh and retry.')}
-    });
-  }else toast('No changes made. Type MOVE, DELETE or CANCEL.');
-}
-
-// roles and user screens
-function setUserDetails(){$('udet').innerHTML=`<span class="rolep ${role.toLowerCase()}" style="font-size:15px;padding:4px 14px">👤 ${role}</span><p class="mu" style="margin:12px 0 0">${esc(me.name||'')}<br>${esc(me.email)}</p><p style="margin:14px 0">${{Owner:'You can manage categories and songs, download and restore backups, view the app code, and manage editors.',Editor:'You can manage categories and songs, and download and restore backups.',Viewer:'You can view categories and search and view songs.'}[role]}</p><button id="so">Sign out</button>`;$('so').onclick=()=>signOut(auth)}
-let songWatchKey='';
-function watchSongs(force){
-  const allowed=visibleCategories();
-  const key=(role||'')+'|'+(db&&me?me.email:'')+'|'+(role==='Owner'?'*':allowed.map(c=>c.id).sort().join(','));
-  if(!force&&key===songWatchKey&&songUnsubs.length)return;   // nothing changed: keep the live listeners
-  songWatchKey=key;
-  songUnsubs.forEach(stop=>stop());songUnsubs=[];
-  if(!db||!me||!allowed.length){songs=[];renderCategories();renderSongs();return;}
-  const parts=new Map();                                      // one bucket per listener, replaced on every snapshot
-  const publish=()=>{const m=new Map();parts.forEach(b=>b.forEach((v,k)=>m.set(k,v)));songs=[...m.values()];renderCategories();renderSongs()};
-  const toSongs=snap=>new Map(snap.docs.map(d=>[d.id,{...d.data(),id:Number(d.data().id)||Number(d.id)}]));
-  const fail=e=>{note='Could not load songs ('+(e&&e.code)+'). Check Firestore rules.';renderSongs()};
-  if(role==='Owner'){songUnsubs.push(onSnapshot(collection(db,'songs'),snap=>{parts.set('all',toSongs(snap));publish();migrateSongs(snap)},fail));return;}
-  allowed.forEach(c=>{songUnsubs.push(onSnapshot(query(collection(db,'songs'),where('categoryId','==',c.id)),snap=>{parts.set(c.id,toSongs(snap));publish()},fail))})
-}
-let migrated=new Set();
-function migrateSongs(snap){   // one-time tidy of old songs (owner only); never re-fires in a loop
-  snap.docs.forEach(d=>{if(migrated.has(d.id))return;const v=d.data(),c=categories.find(x=>categoryDocName(x)===(v.category||'🎵 Church Songs'));
-    if(c&&(!v.categoryId||!Number.isFinite(Number(v.order)))){migrated.add(d.id);updateDoc(doc(db,'songs',d.id),{categoryId:c.id,order:Number(v.order)||Number(v.id)||Number(d.id)||1}).catch(()=>{})}})
-}
-function setRole(r){role=r;const ce=canEdit(),rp=$('role');rp.textContent='👤 '+r;rp.className='rolep '+r.toLowerCase();
-  $('addBtn').classList.toggle('hide',!ce);$('bulkUploadBtn').classList.toggle('hide',!ce);$('addCategoryBtn').classList.toggle('hide',!ce);$('bk').classList.toggle('hide',!ce);$('bkNote').classList.toggle('hide',ce);
-  document.querySelectorAll('.own').forEach(e=>e.classList.toggle('hide',r!=='Owner'));
-  setUserDetails();renderCategories();watchSongs();renderSongs();renderUsers()}
-const accessDrafts=new Map();
-const sameSet=(x,y)=>x.length===y.length&&x.every(v=>y.includes(v));
-function savedCats(email){const a=accessList.get(email);return Array.isArray(a&&a.categories)?a.categories.map(String):[]}
-function showAccessPopup(msg){$('apMsg').innerHTML='<b>'+esc(msg||'Access provided')+'</b>';$('accessPopup').classList.add('show');clearTimeout(showAccessPopup.t);showAccessPopup.t=setTimeout(()=>$('accessPopup').classList.remove('show'),2500)}
-$('apOk').onclick=()=>$('accessPopup').classList.remove('show');
-function updateGiveBtn(email){
-  const btn=document.querySelector('[data-give-access="'+CSS.escape(email)+'"]');if(!btn)return;
-  const specificIds=categories.filter(c=>categoryType(c)==='specific').map(c=>c.id);
-  const saved=savedCats(email).filter(id=>specificIds.includes(id));
-  const draft=accessDrafts.has(email)?accessDrafts.get(email):saved;
-  btn.disabled=sameSet(saved,draft);
-}
-function renderUsers(){
-  if(role!=='Owner')return;
-  const by=new Map(usersList.filter(u=>u.email).map(u=>[String(u.email).toLowerCase(),u]));
-  const uq=($('userSearch')?.value||'').trim().toLowerCase();
-   const people=[...by.values()].filter(u=>String(u.email).toLowerCase()!==OWN)
-     .filter(u=>!uq||String(u.name||'').toLowerCase().includes(uq)||String(u.email||'').toLowerCase().includes(uq))
-     .sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email));
-  if(!people.length){$('ulist').innerHTML=`<div style="margin-bottom:14px"><b>${esc(me.name||me.email)}</b> <span class="rolep owner">owner</span></div><div class="empty">No other users have signed in yet.</div>`;return;}
-  const specific=categories.filter(c=>categoryType(c)==='specific'),specificIds=specific.map(c=>c.id);
-  // drop drafts that now match what is saved
-  for(const [em,d] of [...accessDrafts]){if(sameSet(savedCats(em).filter(id=>specificIds.includes(id)),d))accessDrafts.delete(em)}
-  $('ulist').innerHTML=`<div style="margin-bottom:14px"><b>${esc(me.name||me.email)}</b> <span class="rolep owner">owner</span></div><div style="overflow-x:auto"><table class="user-access-table"><thead><tr><th>Users</th><th>Viewer / Editor</th><th>Category access</th></tr></thead><tbody>${people.map(u=>{
-    const email=String(u.email).toLowerCase(),a=accessList.get(email)||{role:'Viewer'};
-    const saved=savedCats(email).filter(id=>specificIds.includes(id));
-    const draft=accessDrafts.has(email)?accessDrafts.get(email):saved;
-    const checks=specific.length?specific.map(c=>`<label class="cat-check"><input type="checkbox" data-cat-check="${esc(email)}" value="${esc(c.id)}"${draft.includes(c.id)?' checked':''}><span>${esc(categoryDocName(c))}</span></label>`).join(''):'<small class="mu">No specific categories created yet.</small>';
-    return `<tr><td><b>${esc(u.name||email)}</b><small class="au">${esc(email)}</small></td><td><select data-user-role="${esc(email)}" aria-label="Role for ${esc(email)}"><option value="Viewer"${a.role==='Editor'?'':' selected'}>Viewer</option><option value="Editor"${a.role==='Editor'?' selected':''}>Editor</option></select></td><td><div class="cat-checks">${checks}</div>${specific.length?`<button type="button" class="p give-access" data-give-access="${esc(email)}"${sameSet(saved,draft)?' disabled':''}>Give access</button>`:''}</td></tr>`;
-  }).join('')}</tbody></table></div>`;
-}
-function accessError(err){
-  console.error('PraiseLab access update failed:',err);
-  const code=(err&&err.code)||'unknown';
-  toast(code==='permission-denied'?'Permission denied. Publish the included firestore.rules in Firebase Console → Firestore → Rules.':'Could not update access ('+code+').');
-}
-async function writeAccess(email,fields){
-  // merge keeps the other field (role or categories) untouched
-  await setDoc(doc(db,'userAccess',email),{...fields,updatedAt:serverTimestamp()},{merge:true});
-}
-$('userSearch').oninput=renderUsers;
-$('ulist').onchange=async e=>{
-  const t=e.target;
-  if(t.dataset.catCheck){
-    const email=t.dataset.catCheck.toLowerCase();
-    const specificIds=categories.filter(c=>categoryType(c)==='specific').map(c=>c.id);
-    const ticked=[...document.querySelectorAll('[data-cat-check]')].filter(x=>x.dataset.catCheck.toLowerCase()===email&&x.checked).map(x=>x.value).filter(id=>specificIds.includes(id));
-    accessDrafts.set(email,ticked);
-    updateGiveBtn(email);
-    return;
-  }
-  if(t.dataset.userRole){
-    const email=t.dataset.userRole.toLowerCase(),newRole=t.value==='Editor'?'Editor':'Viewer';
-    t.disabled=true;
-    try{
-      await writeAccess(email,{role:newRole,email});
-      const cur=accessList.get(email)||{};accessList.set(email,{...cur,role:newRole});
-      toast('Role changed to '+newRole+'.');
-    }catch(err){accessError(err)}
-    finally{renderUsers()}
-  }
-};
-$('ulist').onclick=async e=>{
-  const btn=e.target.closest('[data-give-access]');if(!btn||btn.disabled)return;
-  const email=btn.dataset.giveAccess.toLowerCase();
-  const specificIds=categories.filter(c=>categoryType(c)==='specific').map(c=>c.id);
-  const chosen=(accessDrafts.has(email)?accessDrafts.get(email):savedCats(email)).filter(id=>specificIds.includes(id));
-  btn.disabled=true;
-  try{
-    await writeAccess(email,{categories:chosen,email});
-    const cur=accessList.get(email)||{role:'Viewer'};accessList.set(email,{...cur,categories:chosen});
-    accessDrafts.delete(email);
-    renderUsers();           // button comes back disabled: nothing pending
-    showAccessPopup('Access provided');
-  }catch(err){accessError(err);updateGiveBtn(email)}
-};
-// Backup and restore: full mixed-category backup remains supported.
-$('bkDl').onclick=()=>{const d=new Date().toISOString().slice(0,10);
-  const payload={app:'PraiseLab',formatVersion:2,saved:d,
-    categories:categories.map(c=>({id:c.id,name:categoryDocName(c),type:categoryType(c)})),
-    songs:[...songs].sort((x,y)=>Number(x.id)-Number(y.id))};
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));
-  a.download='praiselab-backup-'+d+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
-$('bkRs').onclick=()=>$('bkFile').click();
-$('bkFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
-  let j,list,catList=[];try{j=JSON.parse(await f.text());list=(Array.isArray(j)?j:(Array.isArray(j.songs)?j.songs:[]));catList=Array.isArray(j.categories)?j.categories:[]}catch(x){toast('That file is not valid JSON.');return}
-  list=list.filter(x=>x&&String(x.title||'').trim()&&Number(x.id)>0);
-  if(!list.length){toast('No valid songs found in this backup.');return}
-  confirmBox('Restore '+list.length+' songs and '+catList.length+' categories? Existing matching song IDs will be replaced.',async()=>{
-    try{
-      const catMap=new Map(categories.map(c=>[c.id,{id:c.id,name:categoryDocName(c)}]));
-      for(const c of catList){if(!c||!String(c.name||'').trim())continue;
-        const cid=String(c.id||String(c.name).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));
-        await setDoc(doc(db,'categories',cid),{name:String(c.name),type:c.type==='specific'?'specific':'general'},{merge:true});
-        catMap.set(cid,{id:cid,name:String(c.name)});
-      }
-      const byName=new Map([...catMap.values()].map(c=>[c.name,c]));
-      // Also accept categoryId/category pairs where the category is already present.
-      const writes=list.map(song=>{
-        const label=String(song.category||'').trim();
-        let cat=(song.categoryId&&catMap.get(String(song.categoryId)))||byName.get(label);
-        if(!cat&&label){const found=[...catMap.values()].find(c=>c.name.toLowerCase()===label.toLowerCase());if(found)cat=found}
-        if(!cat)throw new Error('Missing category for song: '+(song.title||song.id));
-        const id=String(Number(song.id));
-        return {ref:doc(db,'songs',id),data:{id:Number(song.id),order:Number(song.order)||Number(song.id),title:String(song.title).trim(),body:String(song.body||''),scale:String(song.scale||''),author:String(song.author||''),category:cat.name,categoryId:cat.id}};
-      });
-      for(let i=0;i<writes.length;i+=450){const batch=writeBatch(db);writes.slice(i,i+450).forEach(w=>batch.set(w.ref,w.data));await batch.commit()}
-      toast('Backup restored successfully.'); 
-    }catch(x){console.error('PraiseLab restore failed',x);toast('Restore failed: '+(x.message||'check category mapping and Firestore permissions'))}
-  });
-};
-
-// Category-specific bulk import. The selected category is authoritative; IDs are generated locally.
-$('bulkUploadBtn').onclick=()=>{if(!canEdit()||!activeCategory)return;$('bulkUploadFile').click()};
-$('bulkUploadFile').onchange=async e=>{
-  const file=e.target.files[0];e.target.value='';if(!file)return;
-  let parsed;try{parsed=JSON.parse(await file.text())}catch(err){toast('Invalid JSON file.');return}
-  const records=Array.isArray(parsed)?parsed:(Array.isArray(parsed.songs)?parsed.songs:null);
-  if(!records||!records.length){toast('JSON must contain a non-empty songs array.');return}
-  const category=categories.find(c=>c.id===activeCategory);if(!category){toast('Select a category first.');return}
-  const clean=[];for(let i=0;i<records.length;i++){
-    const x=records[i];if(!x||typeof x!=='object'||Array.isArray(x)||!String(x.title||'').trim()||typeof (x.body??'')!=='string'){
-      toast('Song '+(i+1)+' needs a title and a text body. No songs were uploaded.');return}
-    clean.push({title:String(x.title).trim(),body:String(x.body||''),author:String(x.author||''),scale:String(x.scale||'')});
-  }
-  confirmBox('Upload '+clean.length+' songs to '+categoryDocName(category)+'? Existing songs will not be changed.',async()=>{
-    try{
-      let nextId=Date.now()*1000; // timestamp-based numeric IDs avoid collisions with songs in hidden categories
-      let nextOrder=songs.filter(x=>x.categoryId===category.id||categoryName(x)===categoryDocName(category)).reduce((m,x)=>Math.max(m,songOrder(x)),0)+1;
-      const writes=clean.map((x,i)=>{const id=nextId+i;return {id,data:{id,order:nextOrder+i,...x,category:categoryDocName(category),categoryId:category.id}}});
-      for(let i=0;i<writes.length;i+=450){const batch=writeBatch(db);writes.slice(i,i+450).forEach(w=>batch.set(doc(db,'songs',String(w.id)),w.data));await batch.commit()}
-      toast(writes.length+' songs uploaded to '+categoryDocName(category)+'.');
-    }catch(err){console.error('PraiseLab bulk upload failed',err);toast(err.code==='permission-denied'?'You do not have permission to upload songs to this category.':'Bulk upload failed. Please retry.')}
-  });
-};
-// code view (owner)
-const SRC='<!DOCTYPE html>\\n'+document.documentElement.outerHTML;
-$('srcBtn').onclick=()=>{$('srcpre').textContent=SRC;$('srcov').classList.add('show')};
-$('srcClose').onclick=()=>$('srcov').classList.remove('show');
-$('srcCopy').onclick=async()=>{try{await navigator.clipboard.writeText(SRC);toast('Source copied.')}catch(e){const r=document.createRange();r.selectNodeContents($('srcpre'));const ss=getSelection();ss.removeAllRanges();ss.addRange(r);toast('Text selected. Press and hold to copy it.')}};
-
-// Firebase
-let auth,db;
-if(CONFIG.apiKey.startsWith('PASTE')){$('login').classList.remove('hide');$('gbtn').classList.add('hide');$('cfg').textContent='Setup needed: add your Firebase settings inside this file. See SETUP.md.';$('cfg').classList.remove('hide')}
-else{
-  const fb=initializeApp(CONFIG);
-  auth=getAuth(fb);
-  // Persist previously-read Firestore data and queue supported writes while offline.
-  // The browser may fall back to memory-only operation if persistent storage is unavailable.
-  try {
-    db=initializeFirestore(fb,{
-      localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})
-    });
-  } catch(cacheError) {
-    // Avoid preventing sign-in if this browser does not support persistent IndexedDB caching.
-    const {getFirestore}=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
-    db=getFirestore(fb);
-    console.warn('PraiseLab: persistent offline cache unavailable; using default Firestore.',cacheError);
-  }
-  $('gbtn').onclick=async()=>{const p=new GoogleAuthProvider();
-    try{await signInWithPopup(auth,p)}catch(e){if(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment')signInWithRedirect(auth,p);else if(!/popup-closed|cancelled/.test(e.code))toast('Sign-in failed: '+e.code)}};
-  onAuthStateChanged(auth,u=>{unsubs.forEach(f=>f());unsubs=[];songUnsubs.forEach(f=>f());songUnsubs=[];songWatchKey='';migrated=new Set();songs=[];categories=[];ready=false;
-    if(!u){me=null;$('app').classList.add('hide');$('login').classList.remove('hide');return}
-    me={uid:u.uid,email:(u.email||'').toLowerCase(),name:u.displayName||''};
-    $('login').classList.add('hide');$('app').classList.remove('hide');show('dash');
-    const own=me.email===OWN;setRole(own?'Owner':'Viewer');
-    setDoc(doc(db,'users',u.uid),{email:me.email,name:me.name,lastSeen:serverTimestamp()},{merge:true}).catch(()=>{});
-    unsubs.push(onSnapshot(doc(db,'userAccess',me.email),s=>{const a=s.exists()?s.data():{};myAccess=Array.isArray(a.categories)?a.categories:[];if(!own)setRole(a.role==='Editor'?'Editor':'Viewer');renderCategories();watchSongs();renderSongs()},()=>{}));
-    unsubs.push(onSnapshot(collection(db,'categories'),async snap=>{
-      categories=snap.docs.map(d=>({id:d.id,type:d.data().type==='specific'?'specific':'general',...d.data()})).sort((a,b)=>categoryDocName(a).localeCompare(categoryDocName(b)));
-      if(!snap.size&&canEdit()){
-        try{for(const c of DEFAULT_CATEGORIES)await setDoc(doc(db,'categories',c.id),{name:c.name,type:'general',createdAt:serverTimestamp()},{merge:true})}catch(e){toast('Could not create default categories. Check Firestore permissions.')}
-      }
-      ready=true;renderCategories();watchSongs();renderSongs();
-    },e=>{note='Could not load categories ('+e.code+').';renderCategories()}));
-    watchSongs();
-    if(own){unsubs.push(onSnapshot(collection(db,'userAccess'),s=>{accessList=new Map(s.docs.map(d=>[d.id,d.data()]));renderUsers()},()=>{}));unsubs.push(onSnapshot(collection(db,'users'),s=>{usersList=s.docs.map(d=>d.data());renderUsers()},()=>{}));
-}
-  });
-}
-</script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  // The first install takes control after this page has loaded. Reload once so
-  // Firebase SDK modules are also fetched through the worker and cached for offline use.
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (!sessionStorage.getItem('praiselab-sw-controlled')) {
-      sessionStorage.setItem('praiselab-sw-controlled', '1');
-      window.location.reload();
+    let tt; function toast(m) { const t = $('toast'); t.textContent = m; t.style.display = 'block'; clearTimeout(tt); tt = setTimeout(() => t.style.display = 'none', 3500) }
+    function confirmBox(msg, fn, yesLabel = 'Yes, continue') { $('mt').textContent = msg; $('myes').textContent = yesLabel; $('mno').textContent = 'Cancel'; $('modal').classList.add('show'); $('myes').onclick = () => { $('modal').classList.remove('show'); $('myes').textContent = 'Yes, continue'; fn() }; $('mno').onclick = () => { $('modal').classList.remove('show'); $('myes').textContent = 'Yes, continue' } }
+    const TITLES = { dash: 'Home', categoryView: 'Category', view: 'Song', form: 'Song', aboutsec: 'About', usersec: 'User details', userssec: 'Users', otherssec: 'Others' };
+    const closeNav = () => { $('side').classList.remove('open'); $('scrim').classList.remove('show') };
+    function show(name) {
+      Object.keys(TITLES).forEach(n => $(n).classList.toggle('hide', n !== name));
+      const nav = ['view', 'form', 'categoryView'].includes(name) ? 'dash' : name;
+      document.querySelectorAll('.ni').forEach(b => b.classList.toggle('on', b.dataset.go === nav));
+      $('pt').textContent = TITLES[name] || 'Home'; closeNav(); document.querySelector('.wrap').scrollTop = 0; window.scrollTo(0, 0)
     }
-  });
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(registration => registration.update())
-      .catch(error => console.warn('PraiseLab service worker registration failed:', error));
-  });
-}
-</script>
+    document.querySelectorAll('.ni').forEach(b => b.onclick = () => show(b.dataset.go));
+    $('menuBtn').onclick = () => { $('side').classList.add('open'); $('scrim').classList.add('show') };
+    $('scrim').onclick = closeNav;
+
+    function categoryDocName(c) { return c.name || c.id }
+    function renderCategories() {
+      const grid = $('categoryGrid'), shown = visibleCategories();
+      grid.innerHTML = shown.length ? shown.map(c => {
+        const count = songs.filter(s => categoryName(s) === categoryDocName(c)).length;
+        return `<article class="category-card" data-category="${esc(c.id)}" tabindex="0" role="button" aria-label="Open ${esc(categoryDocName(c))}">
+      <h2>${esc(categoryDocName(c))}</h2><div class="count">${count} ${count === 1 ? 'Song' : 'Songs'}</div>
+      ${canEdit() ? `<div class="acts"><button data-cat-edit="${esc(c.id)}">Edit</button><button class="d" data-cat-delete="${esc(c.id)}">Delete</button></div><span class="type-chip">${categoryType(c)}</span>` : ''}
+    </article>`;
+      }).join('') : `<div class="empty">${ready ? 'No categories available.' : 'Loading categories…'}</div>`;
+    }
+    function openCategoryEditor(id = null) { if (!canEdit()) return; categoryEditId = id; const c = categories.find(x => x.id === id); $('catEditorTitle').textContent = c ? 'Edit category' : 'Add category'; $('catName').value = c ? categoryDocName(c) : ''; $('catType').value = c ? categoryType(c) : 'general'; $('catEditor').classList.add('show'); $('catName').focus() }
+    $('catCancel').onclick = () => $('catEditor').classList.remove('show');
+    $('catSave').onclick = async () => { if (!canEdit()) return; const name = $('catName').value.trim(), type = $('catType').value; if (!name) { toast('Enter a category name.'); return } if (categories.some(c => c.id !== categoryEditId && categoryDocName(c).toLowerCase() === name.toLowerCase())) { toast('That category already exists.'); return } try { if (categoryEditId) { const c = categories.find(x => x.id === categoryEditId), old = categoryDocName(c); categories = categories.map(x => x.id === categoryEditId ? { ...x, name, type } : x).sort((a, b) => categoryDocName(a).localeCompare(categoryDocName(b))); renderCategories(); renderUsers(); await updateDoc(doc(db, 'categories', categoryEditId), { name, type, updatedAt: serverTimestamp() }); for (const song of songs.filter(x => categoryName(x) === old)) await updateDoc(doc(db, 'songs', String(song.id)), { category: name }); } else { const id = name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now().toString(36); const fresh = { id, name, type, createdAt: new Date() }; categories = [...categories.filter(x => x.id !== id), fresh].sort((a, b) => categoryDocName(a).localeCompare(categoryDocName(b))); renderCategories(); renderUsers(); await setDoc(doc(db, 'categories', id), { name, type, createdAt: serverTimestamp() }) } $('catEditor').classList.remove('show'); renderCategories(); renderUsers(); toast(categoryEditId ? 'Category updated.' : 'Category added.') } catch (e) { toast('Could not save category.') } };
+    $('categoryGrid').onclick = async e => {
+      const edit = e.target.dataset.catEdit, del = e.target.dataset.catDelete;
+      if (edit) { e.stopPropagation(); openCategoryEditor(edit); return; }
+      if (del) { e.stopPropagation(); await deleteCategory(del); return }
+      const card = e.target.closest('[data-category]'); if (card) openCategory(card.dataset.category);
+    };
+    $('categoryGrid').onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset.category) { e.preventDefault(); openCategory(e.target.dataset.category) } };
+    function openCategory(id) {
+      const c = visibleCategories().find(x => x.id === id); if (!c) return;
+      activeCategory = id; $('categoryHeading').textContent = categoryDocName(c); $('search').value = ''; renderSongs(); $('list').scrollTop = 0; show('categoryView');
+    }
+    function renderSongs() {
+      const c = categories.find(x => x.id === activeCategory), name = c ? categoryDocName(c) : '';
+      if (c && !visibleCategories().some(x => x.id === c.id)) { activeCategory = null; show('dash'); return }
+      const q = $('search').value.trim().toLowerCase();
+      const all = [...songs].filter(s => categoryName(s) === name).sort((a, b) => songOrder(a) - songOrder(b) || Number(a.id) - Number(b.id));
+      const rows = all.map((s, i) => ({ ...s, displayNo: i + 1 })).filter(s => !q || (/^\d+$/.test(q) ? String(s.displayNo) === q : (s.title + ' ' + (s.author || '')).toLowerCase().includes(q)));
+      $('categorySongCount').textContent = `${all.length} ${all.length === 1 ? 'Song' : 'Songs'}`;
+      $('list').innerHTML = rows.length ? rows.map(s => `<div class="song" tabindex="0" aria-label="Open song ${s.displayNo}: ${esc(s.title)}" draggable="${canEdit() ? 'true' : 'false'}" data-song-row="${esc(s.id)}">${canEdit() ? '<span class="drag-handle" title="Drag to reorder">☷</span>' : ''}<span class="num">${s.displayNo}.</span><span class="t">${esc(s.title)}${(s.author || s.scale) ? `<span class="meta">${s.author ? `<small class="s-au">${esc(s.author)}</small>` : ''}${s.scale ? `<small class="s-sc">Scale: ${esc(s.scale)}</small>` : ''}</span>` : ''}</span>${canEdit() ? `<div class="acts"><button data-e="${esc(s.id)}">Edit</button><button class="d" data-d="${esc(s.id)}">Delete</button></div>` : ''}</div>`).join('') : `<div class="empty">${ready ? 'No songs found.' : note}</div>`;
+    }
+    function applyLocal(list) {   // show our own change instantly; the live listener confirms it
+      const m = new Map(songs.map(x => [String(x.id), x]));
+      list.forEach(([id, patch]) => { const k = String(id); if (patch === null) m.delete(k); else m.set(k, { ...(m.get(k) || {}), id: Number(id), ...patch }) });
+      songs = [...m.values()]; renderCategories(); renderSongs();
+    }
+    async function normalizeCategoryOrder(category, excludeId = null) { const arr = songs.filter(s => s.id != excludeId && categoryName(s) === category).sort((a, b) => songOrder(a) - songOrder(b) || Number(a.id) - Number(b.id)); const batch = writeBatch(db); arr.forEach((s, i) => batch.update(doc(db, 'songs', String(s.id)), { order: i + 1 })); applyLocal(arr.map((s, i) => [s.id, { order: i + 1 }])); await batch.commit() }
+    async function reorderSongs(fromId, toId) { const c = categories.find(x => x.id === activeCategory); if (!c || fromId == toId) return; const arr = songs.filter(s => categoryName(s) === categoryDocName(c)).sort((a, b) => songOrder(a) - songOrder(b) || Number(a.id) - Number(b.id)); const from = arr.findIndex(s => s.id == fromId), to = arr.findIndex(s => s.id == toId); if (from < 0 || to < 0) return; const moved = arr.splice(from, 1)[0]; arr.splice(to, 0, moved); confirmBox(`Move song from ${from + 1} to ${to + 1}?`, async () => { try { const batch = writeBatch(db); arr.forEach((s, i) => batch.update(doc(db, 'songs', String(s.id)), { order: i + 1 })); applyLocal(arr.map((s, i) => [s.id, { order: i + 1 }])); await batch.commit(); toast('Song order updated.') } catch (e) { toast('Could not reorder songs.') } }, 'OK') }
+    function openSong(id, preserveListPosition = false) {
+      const s = songs.find(x => x.id == id); if (!s) return;
+      if (!preserveListPosition) categoryScrollTop = $('list').scrollTop;
+      const ordered = songs.filter(x => categoryName(x) === categoryName(s)).sort((a, b) => songOrder(a) - songOrder(b) || Number(a.id) - Number(b.id));
+      const displayNo = ordered.findIndex(x => String(x.id) === String(s.id)) + 1;
+      $('vt').textContent = `${displayNo}. ${s.title}`;
+      $('vs').innerHTML = [s.author ? `<span class="view-author">Author: ${esc(s.author)}</span>` : '', s.scale ? `<span class="view-scale">Scale: ${esc(s.scale)}</span>` : ''].filter(Boolean).join(' ');
+      $('vs').style.display = $('vs').innerHTML ? '' : 'none'; $('vb').textContent = s.body || '(No lyrics added yet)'; $('vb').scrollTop = 0; $('viewEdit').dataset.songId = s.id; $('viewEdit').classList.toggle('hide', !canEdit()); show('view')
+    }
+    function populateCategorySelect(selected) {
+      $('songCategory').innerHTML = visibleCategories().map(c => `<option value="${esc(categoryDocName(c))}" ${categoryDocName(c) === selected ? 'selected' : ''}>${esc(categoryDocName(c))}</option>`).join('');
+    }
+    function openForm(id, returnToView = false) {
+      if (!canEdit()) return;
+      if (!returnToView) categoryScrollTop = $('list').scrollTop;
+      formReturnView = returnToView;
+      editId = id; const s = songs.find(x => x.id == id); $('ft').textContent = s ? 'Edit song' : 'Add song';
+      $('ti').value = s ? s.title : ''; $('au').value = s ? (s.author || '') : ''; $('sc').value = s ? (s.scale || '') : ''; $('ly').value = s ? (s.body || '') : '';
+      populateCategorySelect(s ? categoryName(s) : (categories.find(c => c.id === activeCategory) ? categoryDocName(categories.find(c => c.id === activeCategory)) : categoryName({})));
+      $('err').classList.add('hide'); show('form');
+    }
+    $('search').oninput = renderSongs; $('sbtn').onclick = renderSongs; $('search').onkeydown = e => { if (e.key === 'Enter') renderSongs() };
+    $('list').onclick = e => {
+      const d = e.target.dataset;
+      if (canEdit() && d.e) { confirmBox('Do you want to edit this song?', () => openForm(d.e)); return }
+      if (canEdit() && d.d) { const s = songs.find(x => x.id == d.d); if (s) confirmBox('Delete “' + s.title + '”? This can’t be undone.', async () => { try { const oldCat = categoryName(s); applyLocal([[d.d, null]]); await deleteDoc(doc(db, 'songs', String(d.d))); await normalizeCategoryOrder(oldCat, d.d); toast('Song deleted.') } catch (x) { toast('Could not delete the song.') } }); return }
+      if (!e.target.closest('button, .drag-handle')) { const row = e.target.closest('[data-song-row]'); if (row) openSong(row.dataset.songRow) }
+    };
+    $('list').onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-song-row]')) { e.preventDefault(); openSong(e.target.dataset.songRow) } };
+    $('list').addEventListener('dragstart', e => { const row = e.target.closest('[data-song-row]'); if (!row || !canEdit()) return; dragSongId = row.dataset.songRow; row.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', dragSongId) });
+    $('list').addEventListener('dragover', e => { const row = e.target.closest('[data-song-row]'); if (!row || !dragSongId) return; e.preventDefault(); document.querySelectorAll('.drop-target').forEach(x => x.classList.remove('drop-target')); row.classList.add('drop-target') });
+    $('list').addEventListener('dragleave', e => { const row = e.target.closest('[data-song-row]'); if (row && !row.contains(e.relatedTarget)) row.classList.remove('drop-target') });
+    $('list').addEventListener('drop', e => { const row = e.target.closest('[data-song-row]'); if (!row || !dragSongId) return; e.preventDefault(); document.querySelectorAll('.dragging,.drop-target').forEach(x => x.classList.remove('dragging', 'drop-target')); const from = dragSongId; dragSongId = null; reorderSongs(from, row.dataset.songRow) });
+    $('list').addEventListener('dragend', () => { dragSongId = null; document.querySelectorAll('.dragging,.drop-target').forEach(x => x.classList.remove('dragging', 'drop-target')) });
+    $('addBtn').onclick = () => openForm(null);
+    $('backCategories').onclick = () => { activeCategory = null; show('dash') };
+    function showCategoryAtSavedScroll() { show('categoryView'); requestAnimationFrame(() => { $('list').scrollTop = categoryScrollTop }) }
+    $('exitView').onclick = showCategoryAtSavedScroll;
+    $('viewEdit').onclick = () => { if (!canEdit()) return; openForm($('viewEdit').dataset.songId, true) };
+    $('exitForm').onclick = () => { if (formReturnView) { formReturnView = false; show('view') } else showCategoryAtSavedScroll() };
+    $('save').onclick = async () => {
+      if (!canEdit()) return;
+      const t = $('ti').value.trim(); if (!t) { $('err').classList.remove('hide'); return }
+      if (!$('songCategory').value) { toast('Create a category before adding songs.'); return }
+      const category = $('songCategory').value, categoryId = (categories.find(c => categoryDocName(c) === category) || {}).id || ''; const data = { title: t, body: $('ly').value, scale: $('sc').value.trim(), author: $('au').value.trim(), category, categoryId };
+      $('save').disabled = true;
+      try {
+        if (editId) { const oldSong = songs.find(x => x.id == editId), oldCat = categoryName(oldSong); const upd = { ...data, ...(oldCat !== data.category ? { order: songs.filter(x => categoryName(x) === data.category).length + 1 } : {}) }; applyLocal([[editId, upd]]); await updateDoc(doc(db, 'songs', String(editId)), upd); if (oldCat !== data.category) await normalizeCategoryOrder(oldCat, editId); await normalizeCategoryOrder(data.category) }
+        else { const id = songs.reduce((m, s) => Math.max(m, Number(s.id) || 0), 0) + 1; const order = songs.filter(s => categoryName(s) === data.category).length + 1; const nd = { id, order, ...data }; applyLocal([[id, nd]]); await setDoc(doc(db, 'songs', String(id)), nd) }
+        const returnToView = formReturnView && Boolean(editId), savedId = editId;
+        formReturnView = false; toast(editId ? 'Song updated.' : 'Song added.'); renderSongs();
+        if (returnToView) openSong(savedId, true); else showCategoryAtSavedScroll()
+      }
+      catch (x) { toast(x && x.code === 'permission-denied' ? 'You do not have permission to change songs.' : 'Could not save. Please try again.') }
+      $('save').disabled = false;
+    };
+
+    $('addCategoryBtn').onclick = () => openCategoryEditor();
+    async function deleteCategory(id) {
+      if (!canEdit()) return; const c = categories.find(x => x.id === id); if (!c) return;
+      const name = categoryDocName(c), contained = songs.filter(s => categoryName(s) === name);
+      if (!contained.length) {
+        confirmBox('Are you sure you want to delete this category?', async () => { try { await deleteDoc(doc(db, 'categories', id)); toast('Category deleted.') } catch (e) { toast('Could not delete category.') } }); return;
+      }
+      const others = categories.filter(x => x.id !== id);
+      const choice = prompt(`This category contains ${contained.length} songs.\n\nType MOVE to move songs to another category, DELETE to delete this category and all its songs, or CANCEL to keep it.`);
+      if (!choice || choice.trim().toUpperCase() === 'CANCEL') return;
+      if (choice.trim().toUpperCase() === 'MOVE') {
+        if (!others.length) { toast('Create another category before moving these songs.'); return }
+        const options = others.map((x, i) => `${i + 1}. ${categoryDocName(x)}`).join('\n');
+        const pick = prompt('Choose destination category by number:\n' + options);
+        const dest = others[Number(pick) - 1]; if (!dest) { toast('No valid destination selected.'); return }
+        confirmBox(`Move ${contained.length} songs to ${categoryDocName(dest)} and delete this category?`, async () => {
+          try { for (const s of contained) await updateDoc(doc(db, 'songs', String(s.id)), { category: categoryDocName(dest), categoryId: dest.id, order: songs.filter(x => categoryName(x) === categoryDocName(dest)).length + contained.indexOf(s) + 1 }); await deleteDoc(doc(db, 'categories', id)); toast('Songs moved and category deleted.') }
+          catch (e) { toast('Could not complete category move. Please retry.') }
+        });
+      } else if (choice.trim().toUpperCase() === 'DELETE') {
+        confirmBox(`Permanently delete ${contained.length} songs and this category? This cannot be undone.`, async () => {
+          try { for (const s of contained) await deleteDoc(doc(db, 'songs', String(s.id))); await deleteDoc(doc(db, 'categories', id)); toast('Category and its songs deleted.') }
+          catch (e) { toast('Delete stopped. Some items may remain; refresh and retry.') }
+        });
+      } else toast('No changes made. Type MOVE, DELETE or CANCEL.');
+    }
+
+    // roles and user screens
+    function setUserDetails() { $('udet').innerHTML = `<span class="rolep ${role.toLowerCase()}" style="font-size:15px;padding:4px 14px">👤 ${role}</span><p class="mu" style="margin:12px 0 0">${esc(me.name || '')}<br>${esc(me.email)}</p><p style="margin:14px 0">${{ Owner: 'You can manage categories and songs, download and restore backups, view the app code, and manage editors.', Editor: 'You can manage categories and songs, and download and restore backups.', Viewer: 'You can view categories and search and view songs.' }[role]}</p><button id="so">Sign out</button>`; $('so').onclick = () => signOut(auth) }
+    let songWatchKey = '';
+    function watchSongs(force) {
+      const allowed = visibleCategories();
+      const key = (role || '') + '|' + (db && me ? me.email : '') + '|' + (role === 'Owner' ? '*' : allowed.map(c => c.id).sort().join(','));
+      if (!force && key === songWatchKey && songUnsubs.length) return;   // nothing changed: keep the live listeners
+      songWatchKey = key;
+      songUnsubs.forEach(stop => stop()); songUnsubs = [];
+      if (!db || !me || !allowed.length) { songs = []; renderCategories(); renderSongs(); return; }
+      const parts = new Map();                                      // one bucket per listener, replaced on every snapshot
+      const publish = () => { const m = new Map(); parts.forEach(b => b.forEach((v, k) => m.set(k, v))); songs = [...m.values()]; renderCategories(); renderSongs() };
+      const toSongs = snap => new Map(snap.docs.map(d => [d.id, { ...d.data(), id: Number(d.data().id) || Number(d.id) }]));
+      const fail = e => { note = 'Could not load songs (' + (e && e.code) + '). Check Firestore rules.'; renderSongs() };
+      if (role === 'Owner') { songUnsubs.push(onSnapshot(collection(db, 'songs'), snap => { parts.set('all', toSongs(snap)); publish(); migrateSongs(snap) }, fail)); return; }
+      allowed.forEach(c => { songUnsubs.push(onSnapshot(query(collection(db, 'songs'), where('categoryId', '==', c.id)), snap => { parts.set(c.id, toSongs(snap)); publish() }, fail)) })
+    }
+    let migrated = new Set();
+    function migrateSongs(snap) {   // one-time tidy of old songs (owner only); never re-fires in a loop
+      snap.docs.forEach(d => {
+        if (migrated.has(d.id)) return; const v = d.data(), c = categories.find(x => categoryDocName(x) === (v.category || '🎵 Church Songs'));
+        if (c && (!v.categoryId || !Number.isFinite(Number(v.order)))) { migrated.add(d.id); updateDoc(doc(db, 'songs', d.id), { categoryId: c.id, order: Number(v.order) || Number(v.id) || Number(d.id) || 1 }).catch(() => { }) }
+      })
+    }
+    function setRole(r) {
+      role = r; const ce = canEdit(), rp = $('role'); rp.textContent = '👤 ' + r; rp.className = 'rolep ' + r.toLowerCase(); rp.classList.toggle('hide', r === 'Viewer'); $('viewEdit').classList.toggle('hide', !ce);
+      $('addBtn').classList.toggle('hide', !ce); $('bulkUploadBtn').classList.toggle('hide', !ce); $('addCategoryBtn').classList.toggle('hide', !ce); $('bk').classList.toggle('hide', !ce); $('bkNote').classList.toggle('hide', ce);
+      document.querySelectorAll('.own').forEach(e => e.classList.toggle('hide', r !== 'Owner'));
+      setUserDetails(); renderCategories(); watchSongs(); renderSongs(); renderUsers()
+    }
+    const accessDrafts = new Map();
+    const sameSet = (x, y) => x.length === y.length && x.every(v => y.includes(v));
+    function savedCats(email) { const a = accessList.get(email); return Array.isArray(a && a.categories) ? a.categories.map(String) : [] }
+    function showAccessPopup(msg) { $('apMsg').innerHTML = '<b>' + esc(msg || 'Access provided') + '</b>'; $('accessPopup').classList.add('show'); clearTimeout(showAccessPopup.t); showAccessPopup.t = setTimeout(() => $('accessPopup').classList.remove('show'), 2500) }
+    $('apOk').onclick = () => $('accessPopup').classList.remove('show');
+    function updateGiveBtn(email) {
+      const btn = document.querySelector('[data-give-access="' + CSS.escape(email) + '"]'); if (!btn) return;
+      const specificIds = categories.filter(c => categoryType(c) === 'specific').map(c => c.id);
+      const saved = savedCats(email).filter(id => specificIds.includes(id));
+      const draft = accessDrafts.has(email) ? accessDrafts.get(email) : saved;
+      btn.disabled = sameSet(saved, draft);
+    }
+    function renderUsers() {
+      if (role !== 'Owner') return;
+      const by = new Map(usersList.filter(u => u.email).map(u => [String(u.email).toLowerCase(), u]));
+      const uq = ($('userSearch')?.value || '').trim().toLowerCase();
+      const people = [...by.values()].filter(u => String(u.email).toLowerCase() !== OWN)
+        .filter(u => !uq || String(u.name || '').toLowerCase().includes(uq) || String(u.email || '').toLowerCase().includes(uq))
+        .sort((a, b) => (a.name || a.email).localeCompare(b.name || b.email));
+      const totalUsers = by.size + (by.has(OWN) ? 0 : 1);
+      const ownerHeader = `<div class="users-owner-row"><div><b>${esc(me.name || me.email)}</b> <span class="rolep owner">owner</span></div><span class="mu users-total">Total users: ${totalUsers}</span></div>`;
+      if (!people.length) { $('ulist').innerHTML = `${ownerHeader}<div class="empty">No other users have signed in yet.</div>`; return; }
+      const specific = categories.filter(c => categoryType(c) === 'specific'), specificIds = specific.map(c => c.id);
+      // drop drafts that now match what is saved
+      for (const [em, d] of [...accessDrafts]) { if (sameSet(savedCats(em).filter(id => specificIds.includes(id)), d)) accessDrafts.delete(em) }
+      $('ulist').innerHTML = `${ownerHeader}<div style="overflow-x:auto"><table class="user-access-table"><thead><tr><th>Users</th><th>Viewer / Editor</th><th>Category access</th></tr></thead><tbody>${people.map(u => {
+        const email = String(u.email).toLowerCase(), a = accessList.get(email) || { role: 'Viewer' };
+        const saved = savedCats(email).filter(id => specificIds.includes(id));
+        const draft = accessDrafts.has(email) ? accessDrafts.get(email) : saved;
+        const checks = specific.length ? specific.map(c => `<label class="cat-check"><input type="checkbox" data-cat-check="${esc(email)}" value="${esc(c.id)}"${draft.includes(c.id) ? ' checked' : ''}><span>${esc(categoryDocName(c))}</span></label>`).join('') : '<small class="mu">No specific categories created yet.</small>';
+        return `<tr><td><b>${esc(u.name || email)}</b><small class="au">${esc(email)}</small></td><td><select data-user-role="${esc(email)}" aria-label="Role for ${esc(email)}"><option value="Viewer"${a.role === 'Editor' ? '' : ' selected'}>Viewer</option><option value="Editor"${a.role === 'Editor' ? ' selected' : ''}>Editor</option></select></td><td><div class="cat-checks">${checks}</div>${specific.length ? `<button type="button" class="p give-access" data-give-access="${esc(email)}"${sameSet(saved, draft) ? ' disabled' : ''}>Give access</button>` : ''}</td></tr>`;
+      }).join('')}</tbody></table></div>`;
+    }
+    function accessError(err) {
+      console.error('PraiseLab access update failed:', err);
+      const code = (err && err.code) || 'unknown';
+      toast(code === 'permission-denied' ? 'Permission denied. Publish the included firestore.rules in Firebase Console → Firestore → Rules.' : 'Could not update access (' + code + ').');
+    }
+    async function writeAccess(email, fields) {
+      // merge keeps the other field (role or categories) untouched
+      await setDoc(doc(db, 'userAccess', email), { ...fields, updatedAt: serverTimestamp() }, { merge: true });
+    }
+    $('userSearch').oninput = renderUsers;
+    $('ulist').onchange = async e => {
+      const t = e.target;
+      if (t.dataset.catCheck) {
+        const email = t.dataset.catCheck.toLowerCase();
+        const specificIds = categories.filter(c => categoryType(c) === 'specific').map(c => c.id);
+        const ticked = [...document.querySelectorAll('[data-cat-check]')].filter(x => x.dataset.catCheck.toLowerCase() === email && x.checked).map(x => x.value).filter(id => specificIds.includes(id));
+        accessDrafts.set(email, ticked);
+        updateGiveBtn(email);
+        return;
+      }
+      if (t.dataset.userRole) {
+        const email = t.dataset.userRole.toLowerCase(), newRole = t.value === 'Editor' ? 'Editor' : 'Viewer';
+        t.disabled = true;
+        try {
+          await writeAccess(email, { role: newRole, email });
+          const cur = accessList.get(email) || {}; accessList.set(email, { ...cur, role: newRole });
+          toast('Role changed to ' + newRole + '.');
+        } catch (err) { accessError(err) }
+        finally { renderUsers() }
+      }
+    };
+    $('ulist').onclick = async e => {
+      const btn = e.target.closest('[data-give-access]'); if (!btn || btn.disabled) return;
+      const email = btn.dataset.giveAccess.toLowerCase();
+      const specificIds = categories.filter(c => categoryType(c) === 'specific').map(c => c.id);
+      const chosen = (accessDrafts.has(email) ? accessDrafts.get(email) : savedCats(email)).filter(id => specificIds.includes(id));
+      btn.disabled = true;
+      try {
+        await writeAccess(email, { categories: chosen, email });
+        const cur = accessList.get(email) || { role: 'Viewer' }; accessList.set(email, { ...cur, categories: chosen });
+        accessDrafts.delete(email);
+        renderUsers();           // button comes back disabled: nothing pending
+        showAccessPopup('Access provided');
+      } catch (err) { accessError(err); updateGiveBtn(email) }
+    };
+    // Backup and restore: full mixed-category backup remains supported.
+    $('bkDl').onclick = () => {
+      const d = new Date().toISOString().slice(0, 10);
+      const payload = {
+        app: 'PraiseLab', formatVersion: 2, saved: d,
+        categories: categories.map(c => ({ id: c.id, name: categoryDocName(c), type: categoryType(c) })),
+        songs: [...songs].sort((x, y) => Number(x.id) - Number(y.id))
+      };
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }));
+      a.download = 'praiselab-backup-' + d + '.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+    };
+    $('bkRs').onclick = () => $('bkFile').click();
+    $('bkFile').onchange = async e => {
+      const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+      let j, list, catList = []; try { j = JSON.parse(await f.text()); list = (Array.isArray(j) ? j : (Array.isArray(j.songs) ? j.songs : [])); catList = Array.isArray(j.categories) ? j.categories : [] } catch (x) { toast('That file is not valid JSON.'); return }
+      list = list.filter(x => x && String(x.title || '').trim() && Number(x.id) > 0);
+      if (!list.length) { toast('No valid songs found in this backup.'); return }
+      confirmBox('Restore ' + list.length + ' songs and ' + catList.length + ' categories? Existing matching song IDs will be replaced.', async () => {
+        try {
+          const catMap = new Map(categories.map(c => [c.id, { id: c.id, name: categoryDocName(c) }]));
+          for (const c of catList) {
+            if (!c || !String(c.name || '').trim()) continue;
+            const cid = String(c.id || String(c.name).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''));
+            await setDoc(doc(db, 'categories', cid), { name: String(c.name), type: c.type === 'specific' ? 'specific' : 'general' }, { merge: true });
+            catMap.set(cid, { id: cid, name: String(c.name) });
+          }
+          const byName = new Map([...catMap.values()].map(c => [c.name, c]));
+          // Also accept categoryId/category pairs where the category is already present.
+          const writes = list.map(song => {
+            const label = String(song.category || '').trim();
+            let cat = (song.categoryId && catMap.get(String(song.categoryId))) || byName.get(label);
+            if (!cat && label) { const found = [...catMap.values()].find(c => c.name.toLowerCase() === label.toLowerCase()); if (found) cat = found }
+            if (!cat) throw new Error('Missing category for song: ' + (song.title || song.id));
+            const id = String(Number(song.id));
+            return { ref: doc(db, 'songs', id), data: { id: Number(song.id), order: Number(song.order) || Number(song.id), title: String(song.title).trim(), body: String(song.body || ''), scale: String(song.scale || ''), author: String(song.author || ''), category: cat.name, categoryId: cat.id } };
+          });
+          for (let i = 0; i < writes.length; i += 450) { const batch = writeBatch(db); writes.slice(i, i + 450).forEach(w => batch.set(w.ref, w.data)); await batch.commit() }
+          toast('Backup restored successfully.');
+        } catch (x) { console.error('PraiseLab restore failed', x); toast('Restore failed: ' + (x.message || 'check category mapping and Firestore permissions')) }
+      });
+    };
+
+    // Category-specific bulk import. The selected category is authoritative; IDs are generated locally.
+    $('bulkUploadBtn').onclick = () => { if (!canEdit() || !activeCategory) return; $('bulkUploadFile').click() };
+    $('bulkUploadFile').onchange = async e => {
+      const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+      let parsed; try { parsed = JSON.parse(await file.text()) } catch (err) { toast('Invalid JSON file.'); return }
+      const records = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.songs) ? parsed.songs : null);
+      if (!records || !records.length) { toast('JSON must contain a non-empty songs array.'); return }
+      const category = categories.find(c => c.id === activeCategory); if (!category) { toast('Select a category first.'); return }
+      const clean = []; for (let i = 0; i < records.length; i++) {
+        const x = records[i]; if (!x || typeof x !== 'object' || Array.isArray(x) || !String(x.title || '').trim() || typeof (x.body ?? '') !== 'string') {
+          toast('Song ' + (i + 1) + ' needs a title and a text body. No songs were uploaded.'); return
+        }
+        clean.push({ title: String(x.title).trim(), body: String(x.body || ''), author: String(x.author || ''), scale: String(x.scale || '') });
+      }
+      confirmBox('Upload ' + clean.length + ' songs to ' + categoryDocName(category) + '? Existing songs will not be changed.', async () => {
+        try {
+          let nextId = Date.now() * 1000; // timestamp-based numeric IDs avoid collisions with songs in hidden categories
+          let nextOrder = songs.filter(x => x.categoryId === category.id || categoryName(x) === categoryDocName(category)).reduce((m, x) => Math.max(m, songOrder(x)), 0) + 1;
+          const writes = clean.map((x, i) => { const id = nextId + i; return { id, data: { id, order: nextOrder + i, ...x, category: categoryDocName(category), categoryId: category.id } } });
+          for (let i = 0; i < writes.length; i += 450) { const batch = writeBatch(db); writes.slice(i, i + 450).forEach(w => batch.set(doc(db, 'songs', String(w.id)), w.data)); await batch.commit() }
+          toast(writes.length + ' songs uploaded to ' + categoryDocName(category) + '.');
+        } catch (err) { console.error('PraiseLab bulk upload failed', err); toast(err.code === 'permission-denied' ? 'You do not have permission to upload songs to this category.' : 'Bulk upload failed. Please retry.') }
+      });
+    };
+    // code view (owner)
+    const SRC = '<!DOCTYPE html>\\n' + document.documentElement.outerHTML;
+    $('srcBtn').onclick = () => { $('srcpre').textContent = SRC; $('srcov').classList.add('show') };
+    $('srcClose').onclick = () => $('srcov').classList.remove('show');
+    $('srcCopy').onclick = async () => { try { await navigator.clipboard.writeText(SRC); toast('Source copied.') } catch (e) { const r = document.createRange(); r.selectNodeContents($('srcpre')); const ss = getSelection(); ss.removeAllRanges(); ss.addRange(r); toast('Text selected. Press and hold to copy it.') } };
+
+    // Firebase
+    let auth, db;
+    if (CONFIG.apiKey.startsWith('PASTE')) { $('login').classList.remove('hide'); $('gbtn').classList.add('hide'); $('cfg').textContent = 'Setup needed: add your Firebase settings inside this file. See SETUP.md.'; $('cfg').classList.remove('hide') }
+    else {
+      const fb = initializeApp(CONFIG);
+      auth = getAuth(fb);
+      // Persist previously-read Firestore data and queue supported writes while offline.
+      // The browser may fall back to memory-only operation if persistent storage is unavailable.
+      try {
+        db = initializeFirestore(fb, {
+          localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+        });
+      } catch (cacheError) {
+        // Avoid preventing sign-in if this browser does not support persistent IndexedDB caching.
+        const { getFirestore } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
+        db = getFirestore(fb);
+        console.warn('PraiseLab: persistent offline cache unavailable; using default Firestore.', cacheError);
+      }
+      $('gbtn').onclick = async () => {
+        const p = new GoogleAuthProvider();
+        try { await signInWithPopup(auth, p) } catch (e) { if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') signInWithRedirect(auth, p); else if (!/popup-closed|cancelled/.test(e.code)) toast('Sign-in failed: ' + e.code) }
+      };
+      onAuthStateChanged(auth, u => {
+        unsubs.forEach(f => f()); unsubs = []; songUnsubs.forEach(f => f()); songUnsubs = []; songWatchKey = ''; migrated = new Set(); songs = []; categories = []; ready = false;
+        if (!u) { me = null; $('app').classList.add('hide'); $('login').classList.remove('hide'); return }
+        me = { uid: u.uid, email: (u.email || '').toLowerCase(), name: u.displayName || '' };
+        $('login').classList.add('hide'); $('app').classList.remove('hide'); show('dash');
+        const own = me.email === OWN; setRole(own ? 'Owner' : 'Viewer');
+        setDoc(doc(db, 'users', u.uid), { email: me.email, name: me.name, lastSeen: serverTimestamp() }, { merge: true }).catch(() => { });
+        unsubs.push(onSnapshot(doc(db, 'userAccess', me.email), s => { const a = s.exists() ? s.data() : {}; myAccess = Array.isArray(a.categories) ? a.categories : []; if (!own) setRole(a.role === 'Editor' ? 'Editor' : 'Viewer'); renderCategories(); watchSongs(); renderSongs() }, () => { }));
+        unsubs.push(onSnapshot(collection(db, 'categories'), async snap => {
+          categories = snap.docs.map(d => ({ id: d.id, type: d.data().type === 'specific' ? 'specific' : 'general', ...d.data() })).sort((a, b) => categoryDocName(a).localeCompare(categoryDocName(b)));
+          if (!snap.size && canEdit()) {
+            try { for (const c of DEFAULT_CATEGORIES) await setDoc(doc(db, 'categories', c.id), { name: c.name, type: 'general', createdAt: serverTimestamp() }, { merge: true }) } catch (e) { toast('Could not create default categories. Check Firestore permissions.') }
+          }
+          ready = true; renderCategories(); watchSongs(); renderSongs();
+        }, e => { note = 'Could not load categories (' + e.code + ').'; renderCategories() }));
+        watchSongs();
+        if (own) {
+          unsubs.push(onSnapshot(collection(db, 'userAccess'), s => { accessList = new Map(s.docs.map(d => [d.id, d.data()])); renderUsers() }, () => { })); unsubs.push(onSnapshot(collection(db, 'users'), s => { usersList = s.docs.map(d => d.data()); renderUsers() }, () => { }));
+        }
+      });
+    }
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      // The first install takes control after this page has loaded. Reload once so
+      // Firebase SDK modules are also fetched through the worker and cached for offline use.
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!sessionStorage.getItem('praiselab-sw-controlled')) {
+          sessionStorage.setItem('praiselab-sw-controlled', '1');
+          window.location.reload();
+        }
+      });
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => registration.update())
+          .catch(error => console.warn('PraiseLab service worker registration failed:', error));
+      });
+    }
+  </script>
 
 </body>
+
 </html>
