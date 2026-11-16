@@ -1,0 +1,37 @@
+{
+  "id": "/",
+  "name": "PraiseLab Christian Songbook",
+  "short_name": "PraiseLab",
+  "description": "Your Christian songbook, available online and offline.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f7f8fb",
+  "theme_color": "#14213d",
+  "categories": [
+    "education",
+    "books",
+    "music"
+  ],
+  "icons": [
+    {
+      "src": "/icons/praiselab-icon-192-v2.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/praiselab-icon-512-v2.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/praiselab-icon-maskable-512-v2.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function verified() { return signedIn() && request.auth.token.email_verified == true; }
+    function userEmail() { return request.auth.token.email.lower(); }
+    function isOwner() { return verified() && userEmail() == 'robertdan1996@gmail.com'; }
+    function accessDoc() {
+      return get(/databases/$(database)/documents/userAccess/$(userEmail())).data;
+    }
+    function isEditor() {
+      return verified()
+        && exists(/databases/$(database)/documents/userAccess/$(userEmail()))
+        && accessDoc().role == 'Editor';
+    }
+    function hasSpecificAccess(categoryId) {
+      return verified()
+        && exists(/databases/$(database)/documents/userAccess/$(userEmail()))
+        && ('categories' in accessDoc())
+        && categoryId in accessDoc().categories;
+    }
+    function categoryData(categoryId) {
+      return get(/databases/$(database)/documents/categories/$(categoryId)).data;
+    }
+    function canReadCategory(categoryId) {
+      return isOwner()
+        || (exists(/databases/$(database)/documents/categories/$(categoryId))
+          && ((!('type' in categoryData(categoryId)))
+            || categoryData(categoryId).type != 'specific'
+            || hasSpecificAccess(categoryId)));
+    }
+    function canEditCategory(categoryId) { return isOwner() || (isEditor() && canReadCategory(categoryId)); }
+
+    match /categories/{categoryId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isOwner() || isEditor();
+    }
+    match /songs/{songId} {
+      // Owner always has full access, even to old songs that have no categoryId yet.
+      allow read: if isOwner() || (signedIn() && resource.data.categoryId is string && canReadCategory(resource.data.categoryId));
+      allow create: if isOwner() || (signedIn() && request.resource.data.categoryId is string && canEditCategory(request.resource.data.categoryId));
+      allow update: if isOwner() || (signedIn() && resource.data.categoryId is string && request.resource.data.categoryId is string
+        && canEditCategory(resource.data.categoryId) && canEditCategory(request.resource.data.categoryId));
+      allow delete: if isOwner() || (signedIn() && resource.data.categoryId is string && canEditCategory(resource.data.categoryId));
+    }
+    // Role (Viewer/Editor) and specific-category grants, one doc per lowercase email.
+    match /userAccess/{email} {
+      allow read: if isOwner() || (verified() && userEmail() == email);
+      allow create, update, delete: if isOwner();
+    }
+    // Legacy editors collection (kept so old data stays readable).
+    match /editors/{email} {
+      allow get: if signedIn();
+      allow list, write: if isOwner();
+    }
+    match /users/{uid} {
+      allow read: if isOwner() || (signedIn() && request.auth.uid == uid);
+      allow write: if signedIn() && request.auth.uid == uid;
+      allow delete: if isOwner();
+    }
+  }
+}

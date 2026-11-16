@@ -1,0 +1,13 @@
+{
+  "app": "PraiseLab",
+  "formatVersion": 1,
+  "category": "This field is optional; the app uses the category currently open",
+  "songs": [
+    {
+      "title": "Amazing Grace",
+      "author": "John Newton",
+      "scale": "G",
+      "body": "1\nAmazing grace! How sweet the sound\nThat saved a wretch like me!\n\n2\n'Twas grace that taught my heart to fear"
+    }
+  ]
+}
