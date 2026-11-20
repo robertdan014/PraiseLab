@@ -119,6 +119,9 @@ dist
 # Firebase cache directory
 .firebase/
 
+# Wrangler local state and generated files
+.wrangler/
+
 # TernJS port file
 .tern-port
 

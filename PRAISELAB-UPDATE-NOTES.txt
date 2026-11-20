@@ -1,0 +1,23 @@
+PraiseLab – Save performance update
+
+Changes:
+- Song edits now write only the edited song document.
+- Editing a song without changing its category no longer triggers category-wide order rewrites.
+- Moving a song assigns it the next order value in the destination category. Display numbering remains based on the sorted song list.
+- Deleting a song no longer rewrites the order field of every remaining song.
+- Save button now prevents duplicate submissions and shows “Saving…” while the write is pending.
+- Save button is restored in a finally block, including when Firestore reports an error.
+- Failed optimistic changes are reverted in the local UI.
+- More informative errors are shown for permission and network failures.
+
+Not changed:
+- Firebase collection/document structure and security rules.
+- Login, roles, category access, bulk upload, backup/restore, PWA, offline setup, song display and navigation.
+
+Validation:
+- Inline JavaScript syntax checked with Node.js.
+- This is a code-level validation, not a live Firebase/mobile-device integration test.
+
+Lazy loading:
+- Not enabled in this patch. The current data model stores song metadata and lyrics together in each Firestore song document, and the current app relies on a live collection listener for category counts, search, ordering, navigation, backup and offline behavior.
+- True per-song lazy loading needs a planned Firestore schema/data migration (for example, keep lightweight song metadata in the list and move lyrics into a separately fetched document/subcollection). This should be implemented as a separate backwards-compatible phase with migration, fallback reads, offline handling and tests, rather than silently changing the existing behavior in this performance patch.
