@@ -1267,7 +1267,10 @@
       { id: 'special-songs', name: '⭐ Special Songs' },
       { id: 'hymnals', name: '📖 Hymnals' }
     ];
-    const categoryName = s => s.category || '🎵 Church Songs';
+    const categoryName = s => {
+      const linkedCategory = s.categoryId && categories.find(c => c.id === String(s.categoryId));
+      return linkedCategory ? categoryDocName(linkedCategory) : s.category || '🎵 Church Songs';
+    };
     const categoryType = c => (c.type === 'specific' ? 'specific' : 'general');
     const songOrder = s => Number.isFinite(Number(s.order)) ? Number(s.order) : Number(s.id) || 0;
     const songsInCategory = category => songs.filter(s => categoryName(s) === category).sort((a, b) => songOrder(a) - songOrder(b) || Number(a.id) - Number(b.id));
@@ -1403,7 +1406,7 @@
       try {
         const icon = iconFile ? await readCategoryIconImage(iconFile) : null;
         if (categoryEditId) {
-          const c = categories.find(x => x.id === categoryEditId), old = categoryDocName(c);
+          const c = categories.find(x => x.id === categoryEditId);
           const removeIcon = categoryIconMarkedForRemoval && !icon;
           const update = { name, type, updatedAt: serverTimestamp(), ...(icon ? { icon } : {}), ...(removeIcon ? { icon: deleteField() } : {}) };
           await updateDoc(doc(db, 'categories', categoryEditId), update);
@@ -1413,8 +1416,9 @@
             if (removeIcon) delete updated.icon;
             return updated;
           }).sort((a, b) => categoryDocName(a).localeCompare(categoryDocName(b)));
-          renderCategories(); renderUsers();
-          for (const song of songs.filter(x => categoryName(x) === old)) await updateDoc(doc(db, 'songs', String(song.id)), { category: name });
+          const active = categories.find(x => x.id === activeCategory);
+          if (active) renderCategoryHeading(active);
+          renderCategories(); renderUsers(); renderSongs();
         } else {
           const id = name.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now().toString(36);
           const fresh = { id, name, type, ...(icon ? { icon } : {}), createdAt: new Date() };
